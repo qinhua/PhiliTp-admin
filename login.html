@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="email=no">
+    <title>菲律宾电话充值管理后台</title>
+    <meta name="description" content="菲律宾电话充值管理后台">
+    <!-- ICONS -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut" type="image/x-icon" href="/favicon.ico">
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+    <!-- 引入页面样式 -->
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body>
+<div id="wrapper">
+    <div class="vertical-align-wrap">
+        <div class="vertical-align-middle">
+            <div class="auth-box">
+                <div class="left">
+                    <div class="content">
+                        <div class="header">
+                            <div class="logo text-center"><img src="assets/img/logo@80.png" alt="Logo"></div>
+                            <p class="lead">Login to your account</p>
+                        </div>
+                        <form class="login-form" action="">
+                            <div class="form-group">
+                                <label for="signin-name" class="control-label sr-only">用户名</label>
+                                <input type="text" class="form-control input-lg" id="signin-name" placeholder="用户名">
+                            </div>
+                            <div class="form-group">
+                                <label for="signin-password" class="control-label sr-only">密码</label>
+                                <input type="password" class="form-control input-lg" id="signin-password" placeholder="密码">
+                            </div>
+                            <div class="form-group clearfix">
+                                <label class="fancy-checkbox element-left">
+                                    <input type="checkbox" id="rememberMe">
+                                    <span>记住我</span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">登 录</button>
+                            <div class="bottom">
+                                <span class="helper-text"><i class="fa fa-lock"></i> <a href="#" data-toggle="modal" data-target="#myModal">忘记密码？</a></span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="overlay"></div>
+                    <div class="content text">
+                        <h1 class="heading">菲律宾电话充值管理后台</h1>
+                        <p>for Administrator</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-key"></i>&nbsp;找回密码</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="userPhone" class="col-sm-2 control-label">手机号：</label>
+                        <div class="col-sm-10">
+                            <input type="tel" class="form-control" id="userPhone" placeholder="手机号">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="verCode" class="col-sm-2 control-label">验证码：</label>
+                        <div class="col-sm-10">
+                            <div class="rows">
+                                <input type="tel" class="form-control col-sm-8" id="verCode" placeholder="验证码">
+                                <button type="button" class="btn btn-primary btn-getCode col-sm-4">获取验证码</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-orange" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">下一步</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="assets/vendor/jquery/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/vendor/jquery.backstretch/jquery.backstretch.min.js"></script>
+<script src="assets/js/login.js"></script>
+</body>
+</html>
