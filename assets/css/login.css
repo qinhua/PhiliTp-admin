@@ -20,6 +20,9 @@ a:focus {
   color: #3b98c8;
   text-decoration: none;
 }
+#btn-login {
+  font-family: "Source Sans Pro", PingFangSC-Regular, "MicrosoftYaHei", "微软雅黑", "Helvetica Neue", 'Avenir', Helvetica, Tahoma, STHeiTi, sans-serif;
+}
 /********************
  * LAYOUT
  ********************/

@@ -1516,11 +1516,19 @@ ul.activity-list > li .timestamp {
     display: none;
   }
 }
-.datas-box {
+.panel-title span {
+  font-size: 12px;
+  color: #999;
+}
+.panel-datas {
+  margin-bottom: 20px !important;
+}
+.rates-box {
   padding: 0 20px;
 }
-.datas-box .col-data {
+.rates-box .col-rate {
   float: left;
+  width: 350px;
   position: relative;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1528,23 +1536,23 @@ ul.activity-list > li .timestamp {
   overflow: hidden;
   height: 148px;
 }
-.datas-box .col-data:not(:last-child) {
+.rates-box .col-rate:not(:last-child) {
   border-right: 1px solid #eee;
 }
-.datas-box .col-data h4 {
+.rates-box .col-rate h4 {
   font-size: 16px;
 }
-.datas-box .col-data .wrp {
+.rates-box .col-rate .wrp {
   padding: 20px 0 0;
   text-align: center;
   word-break: break-word;
 }
-.datas-box .col-data .wrp .ipt-edit {
+.rates-box .col-rate .wrp .ipt-edit {
   margin-bottom: 10px;
 }
-.datas-box .col-data .wrp .ipt-edit input {
+.rates-box .col-rate .wrp .ipt-edit input {
   float: left;
-  width: 70px;
+  width: 100px;
   height: 36px;
   padding: 0 5px;
   text-align: center;
@@ -1552,25 +1560,25 @@ ul.activity-list > li .timestamp {
   border: none;
   border-radius: 4px;
 }
-.datas-box .col-data .wrp .ipt-edit button {
-  overflow: hidden;
-}
-.datas-box .col-data .wrp.ex-rate {
-  font-size: 50px;
-}
-.datas-box .col-data .btn-editv {
+.rates-box .col-rate .wrp .ipt-edit button {
+  float: left;
+  margin-left: 14px;
   height: 36px;
   color: #60635f;
   background: #eee;
   outline: none;
 }
-.datas-box .col-data .editCon.active input {
+.rates-box .col-rate .wrp .ipt-edit.active input {
   background: #fff;
   border: 1px solid #ccc;
 }
-.datas-box .col-data .editCon.active button {
+.rates-box .col-rate .wrp .ipt-edit.active button {
   color: #fff;
   background: #41B314;
+}
+.rates-box .col-rate .wrp.ex-rate {
+  padding: 10px 0 0;
+  font-size: 50px;
 }
 .panel-tags .tags-box {
   padding: 0 16px;
@@ -1590,22 +1598,6 @@ ul.activity-list > li .timestamp {
   border-radius: 5px;
   box-shadow: 0 1px 10px 0 #acdcea;
 }
-.panel-tags .tags-box .f-tag.new {
-  cursor: pointer;
-  text-align: center;
-  background: none;
-  border: 1px solid #eee;
-  border-radius: 5px;
-  box-shadow: none;
-}
-.panel-tags .tags-box .f-tag.new:hover {
-  box-shadow: 0 1px 5px 0 #ddd;
-}
-.panel-tags .tags-box .f-tag.new span {
-  line-height: 148px;
-  font-size: 40px;
-  color: #eee;
-}
 .panel-tags .tags-box .f-tag .close {
   position: absolute;
   right: 0;
@@ -1620,16 +1612,22 @@ ul.activity-list > li .timestamp {
   padding: 20px 12px 5px;
   text-align: center;
   word-break: break-word;
-  /*h3 {
-          font-size: 20px;
-          span {
-            padding-left: 4px;
-            font-size: 14px;
-          }
-        }
-        p {
-          font-size: 18px;
-        }*/
+}
+.panel-tags .tags-box .f-tag .wrp h3 {
+  font-size: 20px;
+  color: #207a96;
+}
+.panel-tags .tags-box .f-tag .wrp h3 span {
+  padding-left: 4px;
+  font-size: 14px;
+}
+.panel-tags .tags-box .f-tag .wrp p {
+  font-size: 18px;
+  color: #45accc;
+}
+.panel-tags .tags-box .f-tag .wrp p span {
+  padding-left: 2px;
+  font-size: 14px;
 }
 .panel-tags .tags-box .f-tag .wrp .ipt-edit {
   margin-bottom: 10px;
@@ -1649,6 +1647,7 @@ ul.activity-list > li .timestamp {
 }
 .panel-tags .tags-box .f-tag .wrp .ipt-edit.edit-peso input {
   font-size: 20px;
+  color: #207a96;
 }
 .panel-tags .tags-box .f-tag .wrp .ipt-edit.edit-peso span {
   display: inline-block;
@@ -1657,13 +1656,9 @@ ul.activity-list > li .timestamp {
 }
 .panel-tags .tags-box .f-tag .wrp .ipt-edit.edit-rmb {
   font-size: 18px;
+  color: #45accc;
 }
-.panel-tags .tags-box .f-tag .wrp.active input {
-  margin-right: 5px;
-  background: #fff;
-  border: 1px solid #78d2ec;
-}
-.panel-tags .tags-box .f-tag .btn-editb {
+.panel-tags .tags-box .f-tag .btn-editT {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -1674,6 +1669,27 @@ ul.activity-list > li .timestamp {
   border: none;
   outline: none;
   border-radius: 0;
+}
+.panel-tags .tags-box .f-tag.new {
+  cursor: pointer;
+  text-align: center;
+  background: none;
+  border: 1px dashed #ddd;
+  border-radius: 5px;
+  box-shadow: none;
+}
+.panel-tags .tags-box .f-tag.new:hover {
+  box-shadow: 0 1px 5px 0 #ddd;
+}
+.panel-tags .tags-box .f-tag.new span {
+  line-height: 148px;
+  font-size: 40px;
+  color: #ddd;
+}
+.panel-tags .tags-box .f-tag.active .wrp input {
+  margin-right: 5px;
+  background: #fff;
+  border: 1px solid #78d2ec;
 }
 .panel-tags .alert-warning {
   margin-top: 20px;

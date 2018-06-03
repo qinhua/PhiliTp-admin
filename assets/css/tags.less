@@ -1,9 +1,21 @@
 @import "common";
 
-.datas-box {
+.panel-title {
+  span {
+    font-size: 12px;
+    color: #999;
+  }
+}
+
+.panel-datas {
+  margin-bottom: 20px !important;
+}
+
+.rates-box {
   padding: 0 20px;
-  .col-data {
+  .col-rate {
     float: left;
+    width: 350px;
     position: relative;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -24,7 +36,7 @@
         margin-bottom: 10px;
         input {
           float: left;
-          width: 70px;
+          width: 100px;
           height: 36px;
           padding: 0 5px;
           text-align: center;
@@ -33,29 +45,27 @@
           border-radius: 4px;
         }
         button {
-          overflow: hidden;
+          float: left;
+          margin-left: 14px;
+          height: 36px;
+          color: #60635f;
+          background: #eee;
+          outline: none;
+        }
+        &.active {
+          input {
+            background: #fff;
+            border: 1px solid #ccc;
+          }
+          button {
+            color: #fff;
+            background: #41B314;
+          }
         }
       }
       &.ex-rate {
+        padding: 10px 0 0;
         font-size: 50px;
-      }
-    }
-    .btn-editv {
-      height: 36px;
-      color: #60635f;
-      background: #eee;
-      outline: none;
-    }
-    .editCon {
-      &.active {
-        input {
-          background: #fff;
-          border: 1px solid #ccc;
-        }
-        button {
-          color: #fff;
-          background: #41B314;
-        }
       }
     }
   }
@@ -78,22 +88,6 @@
       border: 1px solid #78d2ec;
       border-radius: 5px;
       box-shadow: 0 1px 10px 0 #acdcea;
-      &.new {
-        cursor: pointer;
-        text-align: center;
-        background: none;
-        border: 1px solid #eee;
-        border-radius: 5px;
-        box-shadow: none;
-        &:hover {
-          box-shadow: 0 1px 5px 0 #ddd;
-        }
-        span {
-          line-height: 148px;
-          font-size: 40px;
-          color: #eee;
-        }
-      }
       .close {
         position: absolute;
         right: 0;
@@ -108,8 +102,9 @@
         padding: 20px 12px 5px;
         text-align: center;
         word-break: break-word;
-        /*h3 {
+        h3 {
           font-size: 20px;
+          color: #207a96;
           span {
             padding-left: 4px;
             font-size: 14px;
@@ -117,7 +112,12 @@
         }
         p {
           font-size: 18px;
-        }*/
+          color: #45accc;
+          span {
+            padding-left: 2px;
+            font-size: 14px;
+          }
+        }
         .ipt-edit {
           margin-bottom: 10px;
           overflow: hidden;
@@ -136,6 +136,7 @@
           &.edit-peso {
             input {
               font-size: 20px;
+              color: #207a96;
             }
             span {
               display: inline-block;
@@ -145,17 +146,11 @@
           }
           &.edit-rmb {
             font-size: 18px;
-          }
-        }
-        &.active {
-          input {
-            margin-right: 5px;
-            background: #fff;
-            border: 1px solid #78d2ec;
+            color: #45accc;
           }
         }
       }
-      .btn-editb {
+      .btn-editT {
         position: absolute;
         left: 0;
         bottom: 0;
@@ -166,6 +161,31 @@
         border: none;
         outline: none;
         border-radius: 0;
+      }
+      &.new {
+        cursor: pointer;
+        text-align: center;
+        background: none;
+        border: 1px dashed #ddd;
+        border-radius: 5px;
+        box-shadow: none;
+        &:hover {
+          box-shadow: 0 1px 5px 0 #ddd;
+        }
+        span {
+          line-height: 148px;
+          font-size: 40px;
+          color: #ddd;
+        }
+      }
+      &.active {
+        .wrp {
+          input {
+            margin-right: 5px;
+            background: #fff;
+            border: 1px solid #78d2ec;
+          }
+        }
       }
     }
   }

@@ -1516,18 +1516,15 @@ ul.activity-list > li .timestamp {
     display: none;
   }
 }
-.table01 td .sta01 {
+.table01 .td-sta.sta1 {
   color: #FCAD00;
 }
-.table01 td .sta1 {
-  color: red;
-}
-.table01 td .sta1 {
+.table01 .td-sta.sta2 {
   color: #00C777;
 }
-.table01 td .sta2 {
+.table01 .td-sta.sta3 {
   color: #EB3941;
 }
-.table01 td .sta3 {
+.table01 .td-sta.sta4 {
   color: #999;
 }

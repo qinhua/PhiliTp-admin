@@ -97,9 +97,12 @@
             $.ajax({
                 type: method || 'GET',
                 url: url,
+                headers: {token: window.PhiToken || ''},
                 async: async || true,
                 cache: false,
                 timeout: timeOut || 3000,
+                tryCount: 0,
+                retryLimit: 3,
                 //data: $.extend(params || '', {
                 //  _r: typeof sign != "undefined" ? sign(1) : ''
                 //}),
@@ -112,10 +115,6 @@
                     successCb && successCb(data);
                 },
                 error: function (err) {
-                    if (err && err.status == 200) {
-                        successCb && successCb(err);
-                        return
-                    }
                     errCb && errCb(err);
                 }
             });
@@ -1478,7 +1477,6 @@
                             c_end = lc.indexOf(";", c_start);
                             if (c_end === -1) c_end = lc.length;
                             var llc = decodeURIComponent(lc.substring(c_start, c_end));
-                            console.log(llc)
                             return isObj ? ((llc && llc !== "{}") ? JSON.parse(llc) : '') : ((llc && llc !== "{}") || "");
                         }
                     } else {
@@ -2499,6 +2497,23 @@
             return re;
         }
         ,
+        /**
+         * 科学计数转正常计数
+         * @param num
+         * @returns {*}
+         */
+        getFullNum: function (num) {
+            //处理非数字
+            if (isNaN(num)) {
+                return num;
+            }
+            //处理不需要转换的数字
+            var str = '' + num;
+            if (!/e/i.test(str)) {
+                return num;
+            }
+            return (num).toFixed(18).replace(/\.?0+$/, "");
+        },
 
         /**
          *纯js评分
@@ -3034,18 +3049,33 @@
         }
     }
     window.myKit = window.me = myKit;
-    me.curEvt = myKit.hasTouch(),//click or touchstart
+    me.curEvt = myKit.hasTouch();//click or touchstart
+    me.sign = function (a) {
+        var c = Math.abs(parseInt(new Date().getTime() * Math.random() * 10000)).toString();
+        var d = 0;
+        for (var b = 0; b < c.length; b++) {
+            d += parseInt(c[b])
+        }
+        var e = function (f) {
+            return function (g, h) {
+                return (0 >= (h - "" + g.length)) ? g : (f[h] || (f[h] = Array(h + 1).join(0))) + g
+            }
+        }([]);
+        d += c.length;
+        d = e(d, 3 - d.toString().length);
+        return a.toString() + c + d
+    };
 
-        window.requestAnimFrame = (function () {
-            return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.oRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                function (run) {
-                    window.setTimeout(run, 16);
-                };
-        })();
+    window.requestAnimFrame = (function () {
+        return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (run) {
+                window.setTimeout(run, 16);
+            };
+    })();
 
     // 时间格式化
     Date.prototype.format = function (fmt) {

@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 </head>
 <body>
-
+<!-- Page -->
 <div id="main-container">
     <!-- NAVBAR -->
     <nav id="header-area" class="navbar navbar-default navbar-fixed-top">
@@ -108,37 +108,37 @@
                     <div class="col-md-12">
                         <div class="panel panel-datas">
                             <div class="panel-heading">
-                                <h3 class="panel-title">相关数据</h3>
+                                <h3 class="panel-title">相关数据<span>（修改完记得保存）</span></h3>
                             </div>
                             <div class="panel-body">
-                                <div class="row datas-box">
-                                    <div class="col-sm-4 col-data service-rate">
+                                <div class="row rates-box">
+                                    <div class="col-sm-4 col-rate service-rate">
                                         <h4>服务费率（Z）</h4>
                                         <div class="wrp">
-                                            <div class="editCon active">
-                                                <div class="ipt-edit edit01"><input type="tel" value="100"
-                                                                                       placeholder="输入数字" disabled><button type="button" class="btn btn-editv">编辑</button>
+                                            <div class="editCon">
+                                                <div class="ipt-edit edit01 active"><input type="tel" value="100"
+                                                                                       placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
                                                 </div>
                                                 <div class="ipt-edit edit02"><input type="tel" value="9"
                                                                                       placeholder="输入数字"
-                                                                                      disabled><button type="button" class="btn btn-editv">编辑</button></div>
+                                                                                      disabled><button type="button" class="btn btn-editR">编辑</button></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 col-data topup-rate">
+                                    <div class="col-sm-4 col-rate topup-rate">
                                         <h4>充值汇率（P）</h4>
                                         <div class="wrp">
                                             <div class="editCon">
                                                 <div class="ipt-edit edit01"><input type="tel" value="100"
-                                                                                    placeholder="输入数字" disabled><button type="button" class="btn btn-editv">编辑</button>
+                                                                                    placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
                                                 </div>
                                                 <div class="ipt-edit edit02"><input type="tel" value="9"
                                                                                     placeholder="输入数字"
-                                                                                    disabled><button type="button" class="btn btn-editv">编辑</button></div>
+                                                                                    disabled><button type="button" class="btn btn-editR">编辑</button></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-4 col-data exchange-rate">
+                                    <div class="col-sm-4 col-rate exchange-rate">
                                         <h4 class="text-center">实时汇率</h4>
                                         <div class="wrp ex-rate">0.5</div>
                                     </div>
@@ -148,7 +148,7 @@
 
                         <div class="panel panel-tags">
                             <div class="panel-heading">
-                                <h3 class="panel-title">标签配置</h3>
+                                <h3 class="panel-title">标签配置<span>（修改完记得保存）</span></h3>
                             </div>
                             <div class="panel-body">
                                 <div class="row tags-box">
@@ -162,7 +162,7 @@
                                                                                   placeholder="输入数字"
                                                                                   disabled><span>元</span></div>
                                         </div>
-                                        <button type="button" class="btn btn-editb">编辑</button>
+                                        <button type="button" class="btn btn-editT">编辑</button>
                                     </div>
                                     <div class="f-tag">
                                         <button type="button" class="close"><span aria-hidden="true">×</span></button>
@@ -174,7 +174,7 @@
                                                                                   placeholder="输入数字"
                                                                                   disabled><span>元</span></div>
                                         </div>
-                                        <button type="button" class="btn btn-editb">编辑</button>
+                                        <button type="button" class="btn btn-editT">编辑</button>
                                     </div>
                                     <div class="f-tag">
                                         <button type="button" class="close"><span aria-hidden="true">×</span></button>
@@ -186,9 +186,9 @@
                                                                                   placeholder="输入数字"
                                                                                   disabled><span>元</span></div>
                                         </div>
-                                        <button type="button" class="btn btn-editb">编辑</button>
+                                        <button type="button" class="btn btn-editT">编辑</button>
                                     </div>
-                                    <div class="f-tag new"><span class="lnr lnr-plus-circle"></span></div>
+                                    <div class="f-tag new addTag" data-toggle="modal" data-target="#modalTags"><span class="lnr lnr-plus-circle"></span></div>
                                 </div>
                                 <div class="alert alert-warning" role="alert">
                                     说明：充值金额：X，支付金额：Y，服务费率：Z，实时汇率为P(人民币/比索)，卡片配置金额为充值金额。<br><div class="formula">Y=X*(P+Z)</div>
@@ -197,392 +197,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- OVERVIEW -->
-                <!--<div class="panel panel-headline">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Weekly Overview</h3>
-                        <p class="panel-subtitle">Period: Oct 14, 2016 - Oct 21, 2016</p>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="metric">
-                                    <span class="icon"><i class="fa fa-download"></i></span>
-                                    <p>
-                                        <span class="number">1,252</span>
-                                        <span class="title">Downloads</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="metric">
-                                    <span class="icon"><i class="fa fa-shopping-bag"></i></span>
-                                    <p>
-                                        <span class="number">203</span>
-                                        <span class="title">Sales</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="metric">
-                                    <span class="icon"><i class="fa fa-eye"></i></span>
-                                    <p>
-                                        <span class="number">274,678</span>
-                                        <span class="title">Visits</span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="metric">
-                                    <span class="icon"><i class="fa fa-bar-chart"></i></span>
-                                    <p>
-                                        <span class="number">35%</span>
-                                        <span class="title">Conversions</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div id="headline-chart" class="ct-chart"></div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="weekly-summary text-right">
-                                    <span class="number">2,315</span> <span class="percentage"><i
-                                        class="fa fa-caret-up text-success"></i> 12%</span>
-                                    <span class="info-label">Total Sales</span>
-                                </div>
-                                <div class="weekly-summary text-right">
-                                    <span class="number">$5,758</span> <span class="percentage"><i
-                                        class="fa fa-caret-up text-success"></i> 23%</span>
-                                    <span class="info-label">Monthly Income</span>
-                                </div>
-                                <div class="weekly-summary text-right">
-                                    <span class="number">$65,938</span> <span class="percentage"><i
-                                        class="fa fa-caret-down text-danger"></i> 8%</span>
-                                    <span class="info-label">Total Income</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                &lt;!&ndash; END OVERVIEW &ndash;&gt;
-                <div class="row">
-                    <div class="col-md-6">
-                        &lt;!&ndash; RECENT PURCHASES &ndash;&gt;
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Recent Purchases</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body no-padding">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Order No.</th>
-                                        <th>Name</th>
-                                        <th>Amount</th>
-                                        <th>Date &amp; Time</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><a href="#">763648</a></td>
-                                        <td>Steve</td>
-                                        <td>$122</td>
-                                        <td>Oct 21, 2016</td>
-                                        <td><span class="label label-success">COMPLETED</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">763649</a></td>
-                                        <td>Amber</td>
-                                        <td>$62</td>
-                                        <td>Oct 21, 2016</td>
-                                        <td><span class="label label-warning">PENDING</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">763650</a></td>
-                                        <td>Michael</td>
-                                        <td>$34</td>
-                                        <td>Oct 18, 2016</td>
-                                        <td><span class="label label-danger">FAILED</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">763651</a></td>
-                                        <td>Roger</td>
-                                        <td>$186</td>
-                                        <td>Oct 17, 2016</td>
-                                        <td><span class="label label-success">SUCCESS</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="#">763652</a></td>
-                                        <td>Smith</td>
-                                        <td>$362</td>
-                                        <td>Oct 16, 2016</td>
-                                        <td><span class="label label-success">SUCCESS</span></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="panel-footer">
-                                <div class="row">
-                                    <div class="col-md-6"><span class="panel-note"><i class="fa fa-clock-o"></i> Last 24 hours</span>
-                                    </div>
-                                    <div class="col-md-6 text-right"><a href="#" class="btn btn-primary">View All
-                                        Purchases</a></div>
-                                </div>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END RECENT PURCHASES &ndash;&gt;
-                    </div>
-                    <div class="col-md-6">
-                        &lt;!&ndash; MULTI CHARTS &ndash;&gt;
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Projection vs. Realization</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div id="visits-trends-chart" class="ct-chart"></div>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END MULTI CHARTS &ndash;&gt;
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-7">
-                        &lt;!&ndash; TODO LIST &ndash;&gt;
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">To-Do List</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-unstyled todo-list">
-                                    <li>
-                                        <label class="control-inline fancy-checkbox">
-                                            <input type="checkbox"><span></span>
-                                        </label>
-                                        <p>
-                                            <span class="title">Restart Server</span>
-                                            <span class="short-description">Dynamically integrate client-centric technologies without cooperative resources.</span>
-                                            <span class="date">Oct 9, 2016</span>
-                                        </p>
-                                        <div class="controls">
-                                            <a href="#"><i class="icon-software icon-software-pencil"></i></a> <a
-                                                href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <label class="control-inline fancy-checkbox">
-                                            <input type="checkbox"><span></span>
-                                        </label>
-                                        <p>
-                                            <span class="title">Retest Upload Scenario</span>
-                                            <span class="short-description">Compellingly implement clicks-and-mortar relationships without highly efficient metrics.</span>
-                                            <span class="date">Oct 23, 2016</span>
-                                        </p>
-                                        <div class="controls">
-                                            <a href="#"><i class="icon-software icon-software-pencil"></i></a> <a
-                                                href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <label class="control-inline fancy-checkbox">
-                                            <input type="checkbox"><span></span>
-                                        </label>
-                                        <p>
-                                            <strong>Functional Spec Meeting</strong>
-                                            <span class="short-description">Monotonectally formulate client-focused core competencies after parallel web-readiness.</span>
-                                            <span class="date">Oct 11, 2016</span>
-                                        </p>
-                                        <div class="controls">
-                                            <a href="#"><i class="icon-software icon-software-pencil"></i></a> <a
-                                                href="#"><i class="icon-arrows icon-arrows-circle-remove"></i></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END TODO LIST &ndash;&gt;
-                    </div>
-                    <div class="col-md-5">
-                        &lt;!&ndash; TIMELINE &ndash;&gt;
-                        <div class="panel panel-scrolling">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Recent User Activity</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-unstyled activity-list">
-                                    <li>
-                                        <img src="assets/img/user1.png" alt="Avatar"
-                                             class="img-circle pull-left avatar">
-                                        <p><a href="#">Michael</a> has achieved 80% of his completed tasks <span
-                                                class="timestamp">20 minutes ago</span></p>
-                                    </li>
-                                    <li>
-                                        <img src="assets/img/user2.png" alt="Avatar"
-                                             class="img-circle pull-left avatar">
-                                        <p><a href="#">Daniel</a> has been added as a team member to project <a
-                                                href="#">System Update</a> <span class="timestamp">Yesterday</span></p>
-                                    </li>
-                                    <li>
-                                        <img src="assets/img/user3.png" alt="Avatar"
-                                             class="img-circle pull-left avatar">
-                                        <p><a href="#">Martha</a> created a new heatmap view <a href="#">Landing
-                                            Page</a> <span class="timestamp">2 days ago</span></p>
-                                    </li>
-                                    <li>
-                                        <img src="assets/img/user4.png" alt="Avatar"
-                                             class="img-circle pull-left avatar">
-                                        <p><a href="#">Jane</a> has completed all of the tasks <span class="timestamp">2 days ago</span>
-                                        </p>
-                                    </li>
-                                    <li>
-                                        <img src="assets/img/user5.png" alt="Avatar"
-                                             class="img-circle pull-left avatar">
-                                        <p><a href="#">Jason</a> started a discussion about <a href="#">Weekly
-                                            Meeting</a> <span class="timestamp">3 days ago</span></p>
-                                    </li>
-                                </ul>
-                                <button type="button" class="btn btn-primary btn-bottom center-block">Load More</button>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END TIMELINE &ndash;&gt;
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        &lt;!&ndash; TASKS &ndash;&gt;
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">My Tasks</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="list-unstyled task-list">
-                                    <li>
-                                        <p>Updating Users Settings <span class="label-percent">23%</span></p>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar"
-                                                 aria-valuenow="23" aria-valuemin="0" aria-valuemax="100"
-                                                 style="width:23%">
-                                                <span class="sr-only">23% Complete</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>Load &amp; Stress Test <span class="label-percent">80%</span></p>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                                 aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                                 style="width: 80%">
-                                                <span class="sr-only">80% Complete</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>Data Duplication Check <span class="label-percent">100%</span></p>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-success" role="progressbar"
-                                                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"
-                                                 style="width: 100%">
-                                                <span class="sr-only">Success</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>Server Check <span class="label-percent">45%</span></p>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-warning" role="progressbar"
-                                                 aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"
-                                                 style="width: 45%">
-                                                <span class="sr-only">45% Complete</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p>Mobile App Development <span class="label-percent">10%</span></p>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar"
-                                                 aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"
-                                                 style="width: 10%">
-                                                <span class="sr-only">10% Complete</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END TASKS &ndash;&gt;
-                    </div>
-                    <div class="col-md-4">
-                        &lt;!&ndash; VISIT CHART &ndash;&gt;
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Website Visits</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div id="visits-chart" class="ct-chart"></div>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END VISIT CHART &ndash;&gt;
-                    </div>
-                    <div class="col-md-4">
-                        &lt;!&ndash; REALTIME CHART &ndash;&gt;
-                        <div class="panel">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">System Load</h3>
-                                <div class="right">
-                                    <button type="button" class="btn-toggle-collapse"><i class="lnr lnr-chevron-up"></i>
-                                    </button>
-                                    <button type="button" class="btn-remove"><i class="lnr lnr-cross"></i></button>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div id="system-load" class="easy-pie-chart" data-percent="70">
-                                    <span class="percent">70</span>
-                                </div>
-                                <h4>CPU Load</h4>
-                                <ul class="list-unstyled list-justify">
-                                    <li>High: <span>95%</span></li>
-                                    <li>Average: <span>87%</span></li>
-                                    <li>Low: <span>20%</span></li>
-                                    <li>Threads: <span>996</span></li>
-                                    <li>Processes: <span>259</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                        &lt;!&ndash; END REALTIME CHART &ndash;&gt;
-                    </div>
-                </div>-->
             </div>
         </div>
         <!-- END MAIN CONTENT -->
@@ -598,16 +212,107 @@
     <!-- END FOOTER -->
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="modalTags" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"><i class="fa fa-tag"></i>&nbsp;添加标签</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="tagPrice" class="col-sm-3 control-label">充值金额：</label>
+                        <div class="col-sm-9">
+                            <input type="tel" class="form-control" id="tagPrice" placeholder="充值金额（Peso）">
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <label for="verCode" class="col-sm-2 control-label">验证码：</label>
+                        <div class="col-sm-10">
+                            <div class="rows">
+                                <input type="tel" class="form-control col-sm-8" id="verCode" placeholder="验证码">
+                                <button type="button" class="btn btn-primary btn-getCode col-sm-4">获取验证码</button>
+                            </div>
+                        </div>
+                    </div>-->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-orange" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary btn-saveTag">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Templates-->
+<script type="text/html" id="render-rates">
+    {{if data}}
+        <div class="col-sm-4 col-rate service-rate active">
+            <h4>服务费率（Z）</h4>
+            <div class="wrp">
+                <div class="editCon">
+                    <div class="ipt-edit edit01"><input id="serviceRate" type="tel" value="{{data.serviceRate}}"
+                                                        placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
+                    </div>
+                    <!--<div class="ipt-edit edit02"><input type="tel" value="{{data.rmbRate}}"
+                                                        placeholder="输入数字"
+                                                        disabled><button type="button" class="btn btn-editR">编辑</button></div>-->
+                </div>
+            </div>
+        </div>
+        <!--<div class="col-sm-4 col-rate topup-rate">
+            <h4>充值汇率（P）</h4>
+            <div class="wrp">
+                <div class="editCon">
+                    <div class="ipt-edit edit01"><input type="tel" value="{{data.pesoRate}}"
+                                                        placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
+                    </div>
+                    <div class="ipt-edit edit02"><input type="tel" value="{{data.rmbRate}}"
+                                                        placeholder="输入数字"
+                                                        disabled><button type="button" class="btn btn-editR">编辑</button></div>
+                </div>
+            </div>
+        </div>-->
+        <div class="col-sm-4 col-rate exchange-rate">
+            <h4 class="text-center">实时汇率</h4>
+            <div class="wrp ex-rate" id="timeRate">{{data.timeRate}}</div>
+        </div>
+    {{/if}}
+</script>
+<script type="text/html" id="render-tags">
+    {{if data}}
+        {{each data}}
+        <div class="f-tag" data-id="{{$value.id}}">
+            <button type="button" class="close" data-id="{{$value.id}}"><span aria-hidden="true">×</span></button>
+            <div class="wrp">
+                <!--<div class="ipt-edit edit-peso"><input type="tel" value="{{$value.forex}}"
+                                                       placeholder="输入数字" disabled><span>Peso</span>
+                </div>
+                <div class="ipt-edit edit-rmb"><input type="tel" value="{{$value.rmb}}"
+                                                      placeholder="输入数字"
+                                                      disabled><span>元</span></div>-->
+                <h3>{{$value.forex}}<span>Peso</span></h3>
+                <p>{{$value.rmb}}<span>元</span></p>
+            </div>
+            <!--<button type="button" class="btn btn-editT" data-id="{{$value.id}}">编辑</button>-->
+        </div>
+        {{/each}}
+        <div class="f-tag new" data-toggle="modal" data-target="#modalTags" onclick="document.getElementById('tagPrice').value='';"><span class="lnr lnr-plus-circle"></span></div>
+    {{/if}}
+</script>
+
 <!-- Javascript -->
 <script src="assets/vendor/jquery/jquery.min.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="assets/vendor/laydate/laydate.js"></script>
-<script src="assets/js/myKit.js"></script>
+<script src="assets/vendor/template-web.js"></script>
+<script src="assets/vendor/layer/layer.js"></script>
 <script src="assets/config.js"></script>
-<!--<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-<script src="assets/vendor/chartist/js/chartist.min.js"></script>-->
-<script src="assets/vendor/tableExport/tableExport.js"></script>
-<script src="assets/js/index.js"></script>
+<script src="assets/js/myKit.js"></script>
+<!--<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>-->
+<script src="assets/js/tags.js"></script>
 </body>
 </html>
