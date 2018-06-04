@@ -109,7 +109,6 @@ if (typeof template !== 'undefined') {
                 "S": ctime.getMilliseconds()
             };
             if (/(y+)/.test(format)) {
-                console.log(format)
                 format = format.replace(RegExp.$1, (ctime.getFullYear() + "").substr(4 - RegExp.$1.length));
                 for (var k in o)
                     if (new RegExp("(" + k + ")").test(format))

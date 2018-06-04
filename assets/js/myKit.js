@@ -112,6 +112,8 @@
                     beforeCb && beforeCb();
                 },
                 success: function (data) {
+                    /*if(data.message){
+                    }*/
                     successCb && successCb(data);
                 },
                 error: function (err) {

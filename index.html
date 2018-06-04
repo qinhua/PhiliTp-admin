@@ -11,8 +11,7 @@
     <title>菲律宾电话充值管理后台</title>
     <meta name="description" content="菲律宾电话充值管理后台">
     <!-- ICONS -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <!--<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/ico/apple-touch-icon-114-precomposed.png">
@@ -211,34 +210,18 @@
                             </div>
                             <div class="bottom-operate">
                                 <nav aria-label="Page navigation" class="page-nav">
-                                    <ul class="pagination">
-                                        <li>
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">&laquo;</span>
-                                            </a>
-                                        </li>
-                                        <li><a href="#">1</a></li>
-                                        <li><a href="#">2</a></li>
-                                        <li><a href="#">3</a></li>
-                                        <li><a href="#">4</a></li>
-                                        <li><a href="#">5</a></li>
-                                        <li>
-                                            <a href="#" aria-label="Next">
-                                                <span aria-hidden="true">&raquo;</span>
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <ul class="pagination"></ul>
                                 </nav>
                                 <div class="input-group">
-                                    <input type="tel" class="form-control" placeholder="1" aria-describedby="sizing-addon1">
-                                    <span class="input-group-addon" id="userPageNumber">页</span>
+                                    <input type="tel" id="userPageNumber" class="form-control" value="1" placeholder="页码" aria-describedby="sizing-addon1">
+                                    <span class="input-group-addon userPageGo">GO</span>
                                 </div>
                                 <div class="dropdown">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="pageSize" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         10条/页
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <ul class="dropdown-menu pageDropDown" aria-labelledby="pageDropDown">
                                         <li><a href="#">10条/页</a></li>
                                         <li><a href="#">30条/页</a></li>
                                         <li><a href="#">50条/页</a></li>
@@ -298,6 +281,7 @@
 <!-- Javascript -->
 <script src="assets/vendor/jquery/jquery.min.js"></script>
 <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/vendor/bootstrap-paginator.js"></script>
 <script src="assets/vendor/template-web.js"></script>
 <script src="assets/vendor/layer/layer.js"></script>
 <script src="assets/vendor/laydate/laydate.js"></script>

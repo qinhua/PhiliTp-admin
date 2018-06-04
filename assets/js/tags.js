@@ -1,9 +1,5 @@
 $(function () {
     var $dom = $(document)
-console.log(window.PhiToken)
-    var theData = {
-        authToken: '',
-    }
 
     /*获取费率数据*/
     var getRate = function (cb) {
@@ -12,6 +8,7 @@ console.log(window.PhiToken)
                 _r: me.sign(1)
             })
         }, 'POST', 'JSON', null, null, function (res) {
+            layer.closeAll()
             if (res.success) {
                 $('.rates-box').html(template('render-rates', {
                     data: res.data
@@ -36,7 +33,7 @@ console.log(window.PhiToken)
     /*更新费率*/
     $dom.on('click', '.btn-editR', function () {
         if (me.isPosting) return false
-        var $this = $(this), cid = $this.attr('data-id'), $parent = $this.parent()
+        var $this = $(this), $parent = $this.parent()/*, cid = $this.attr('data-id')*/
         if ($this.text() === '编辑') {
             $parent.addClass('active')
             $parent.find('input').prop('disabled', false)
@@ -55,7 +52,6 @@ console.log(window.PhiToken)
                 })
             }, function (res) {
                 me.isPosting = false
-                layer.closeAll()
                 if (res.success) {
                     getRate()
                     getTags()
@@ -67,8 +63,8 @@ console.log(window.PhiToken)
                 layer.closeAll()
                 layer.msg(res.message || '更新失败！')
                 /*$parent.removeClass('active')
-                $parent.find('input').prop('disabled', true)
-                $this.text('编辑')*/
+                 $parent.find('input').prop('disabled', true)
+                 $this.text('编辑')*/
             })
         }
     })
@@ -82,6 +78,7 @@ console.log(window.PhiToken)
             })
         }, 'POST', 'JSON', null, null, function (res) {
             me.isPosting = false
+            layer.closeAll()
             if (res.success) {
                 $('.tags-box').html(template('render-tags', {
                     data: res.data
@@ -167,8 +164,8 @@ console.log(window.PhiToken)
                 layer.closeAll()
                 layer.msg(res.message || '更新失败！')
                 /*$parent.removeClass('active')
-                $parent.find('input').prop('disabled', true)
-                $this.text('编辑')*/
+                 $parent.find('input').prop('disabled', true)
+                 $this.text('编辑')*/
             })
         }
     })

@@ -11,9 +11,7 @@
     <title>菲律宾电话充值管理后台</title>
     <meta name="description" content="菲律宾电话充值管理后台">
     <!-- ICONS -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="shortcut" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <!-- VENDOR CSS -->
     <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
@@ -74,7 +72,8 @@
                             <!--<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
                             <li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
                             <li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>-->
-                            <li class="log-out"><a href="javascript:;"><i class="lnr lnr-exit"></i><span>注销</span></a></li>
+                            <li class="log-out"><a href="javascript:;"><i class="lnr lnr-exit"></i><span>注销</span></a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -112,7 +111,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row rates-box">
-                                    <div class="col-sm-4 col-rate service-rate">
+                                    <!--<div class="col-sm-4 col-rate service-rate">
                                         <h4>服务费率（Z）</h4>
                                         <div class="wrp">
                                             <div class="editCon">
@@ -141,7 +140,7 @@
                                     <div class="col-sm-4 col-rate exchange-rate">
                                         <h4 class="text-center">实时汇率</h4>
                                         <div class="wrp ex-rate">0.5</div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -152,7 +151,7 @@
                             </div>
                             <div class="panel-body">
                                 <div class="row tags-box">
-                                    <div class="f-tag">
+                                    <!--<div class="f-tag">
                                         <button type="button" class="close"><span aria-hidden="true">×</span></button>
                                         <div class="wrp active">
                                             <div class="ipt-edit edit-peso"><input type="tel" value="100"
@@ -188,10 +187,11 @@
                                         </div>
                                         <button type="button" class="btn btn-editT">编辑</button>
                                     </div>
-                                    <div class="f-tag new addTag" data-toggle="modal" data-target="#modalTags"><span class="lnr lnr-plus-circle"></span></div>
+                                    <div class="f-tag new addTag" data-toggle="modal" data-target="#modalTags"><span class="lnr lnr-plus-circle"></span></div>-->
                                 </div>
                                 <div class="alert alert-warning" role="alert">
-                                    说明：充值金额：X，支付金额：Y，服务费率：Z，实时汇率为P(人民币/比索)，卡片配置金额为充值金额。<br><div class="formula">Y=X*(P+Z)</div>
+                                    说明：充值金额：X，支付金额：Y，服务费率：Z，实时汇率为P(人民币/比索)，卡片配置金额为充值金额。<br>
+                                    <div class="formula">Y=X*(P+Z)</div>
                                 </div>
                             </div>
                         </div>
@@ -217,7 +217,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="myModalLabel"><i class="fa fa-tag"></i>&nbsp;添加标签</h4>
             </div>
@@ -251,58 +252,58 @@
 <!--Templates-->
 <script type="text/html" id="render-rates">
     {{if data}}
-        <div class="col-sm-4 col-rate service-rate active">
-            <h4>服务费率（Z）</h4>
-            <div class="wrp">
-                <div class="editCon">
-                    <div class="ipt-edit edit01"><input id="serviceRate" type="tel" value="{{data.serviceRate}}"
-                                                        placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
-                    </div>
-                    <!--<div class="ipt-edit edit02"><input type="tel" value="{{data.rmbRate}}"
-                                                        placeholder="输入数字"
-                                                        disabled><button type="button" class="btn btn-editR">编辑</button></div>-->
+    <div class="col-sm-4 col-rate service-rate active">
+        <h4>服务费率（Z）</h4>
+        <div class="wrp">
+            <div class="editCon">
+                <div class="ipt-edit edit01"><input id="serviceRate" type="tel" value="{{data.serviceRate}}"
+                                                    placeholder="输入数字" disabled>
+                    <button type="button" class="btn btn-editR">编辑</button>
                 </div>
+                <!--<div class="ipt-edit edit02"><input type="tel" value="{{data.rmbRate}}"
+                                                    placeholder="输入数字"
+                                                    disabled><button type="button" class="btn btn-editR">编辑</button></div>-->
             </div>
         </div>
-        <!--<div class="col-sm-4 col-rate topup-rate">
-            <h4>充值汇率（P）</h4>
-            <div class="wrp">
-                <div class="editCon">
-                    <div class="ipt-edit edit01"><input type="tel" value="{{data.pesoRate}}"
-                                                        placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
-                    </div>
-                    <div class="ipt-edit edit02"><input type="tel" value="{{data.rmbRate}}"
-                                                        placeholder="输入数字"
-                                                        disabled><button type="button" class="btn btn-editR">编辑</button></div>
+    </div>
+    <!--<div class="col-sm-4 col-rate topup-rate">
+        <h4>充值汇率（P）</h4>
+        <div class="wrp">
+            <div class="editCon">
+                <div class="ipt-edit edit01"><input type="tel" value="{{data.pesoRate}}"
+                                                    placeholder="输入数字" disabled><button type="button" class="btn btn-editR">编辑</button>
                 </div>
+                <div class="ipt-edit edit02"><input type="tel" value="{{data.rmbRate}}"
+                                                    placeholder="输入数字"
+                                                    disabled><button type="button" class="btn btn-editR">编辑</button></div>
             </div>
-        </div>-->
-        <div class="col-sm-4 col-rate exchange-rate">
-            <h4 class="text-center">实时汇率</h4>
-            <div class="wrp ex-rate" id="timeRate">{{data.timeRate}}</div>
         </div>
+    </div>-->
+    <div class="col-sm-4 col-rate exchange-rate">
+        <h4 class="text-center">实时汇率</h4>
+        <div class="wrp ex-rate" id="timeRate">{{data.timeRate}}</div>
+    </div>
     {{/if}}
 </script>
 <script type="text/html" id="render-tags">
-    {{if data}}
-        {{each data}}
-        <div class="f-tag" data-id="{{$value.id}}">
-            <button type="button" class="close" data-id="{{$value.id}}"><span aria-hidden="true">×</span></button>
-            <div class="wrp">
-                <!--<div class="ipt-edit edit-peso"><input type="tel" value="{{$value.forex}}"
-                                                       placeholder="输入数字" disabled><span>Peso</span>
-                </div>
-                <div class="ipt-edit edit-rmb"><input type="tel" value="{{$value.rmb}}"
-                                                      placeholder="输入数字"
-                                                      disabled><span>元</span></div>-->
-                <h3>{{$value.forex}}<span>Peso</span></h3>
-                <p>{{$value.rmb}}<span>元</span></p>
+    {{each data}}
+    <div class="f-tag" data-id="{{$value.id}}">
+        <button type="button" class="close" data-id="{{$value.id}}"><span aria-hidden="true">×</span></button>
+        <div class="wrp">
+            <!--<div class="ipt-edit edit-peso"><input type="tel" value="{{$value.forex}}"
+                                                   placeholder="输入数字" disabled><span>Peso</span>
             </div>
-            <!--<button type="button" class="btn btn-editT" data-id="{{$value.id}}">编辑</button>-->
+            <div class="ipt-edit edit-rmb"><input type="tel" value="{{$value.rmb}}"
+                                                  placeholder="输入数字"
+                                                  disabled><span>元</span></div>-->
+            <h3>{{$value.forex}}<span>Peso</span></h3>
+            <p>{{$value.rmb}}<span>元</span></p>
         </div>
-        {{/each}}
-        <div class="f-tag new" data-toggle="modal" data-target="#modalTags" onclick="document.getElementById('tagPrice').value='';"><span class="lnr lnr-plus-circle"></span></div>
-    {{/if}}
+        <!--<button type="button" class="btn btn-editT" data-id="{{$value.id}}">编辑</button>-->
+    </div>
+    {{/each}}
+    <div class="f-tag new" data-toggle="modal" data-target="#modalTags"
+         onclick="document.getElementById('tagPrice').value='';"><span class="lnr lnr-plus-circle"></span></div>
 </script>
 
 <!-- Javascript -->

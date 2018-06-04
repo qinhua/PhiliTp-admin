@@ -7,16 +7,20 @@ $(function () {
 
     /*流水数据*/
     var getList = function (page) {
-        me.loadData(Config.host + Config.api.statisList, {
+        me.loadData(Config.host + Config.api.orderList, {
             'requestapp': JSON.stringify({
                 _r: window.sign(1),
-                createTime: $('#t-createTime').val()
+                createTime: $('#t-createTime').val(),
+                pageSize: $('#pageSize').text().trim().replace(/条\/\页/g, ''),
+                page: page
             })
         }, 'POST', 'JSON', null, null, function (res) {
             if (res.success) {
+                var resD = res.data
                 $('#table-box').html(template('render-table', {
                     data: res.data
                 }))
+                renderPagination(page, resD.count)
             } else {
                 layer.msg(res.message || '获取失败！')
             }
@@ -42,10 +46,6 @@ $(function () {
         elem: '.ipt-time',
         // lang: 'en'
     });
-    $("ul.dropdown-menu").on("click", "[data-stopPropagation]", function (e) {
-        e.stopPropagation();
-    });
-    $('.dropdown-toggle').dropdown()
 
     $dom.on('change', 'select', function () {
         var $this = $(this)
@@ -66,6 +66,53 @@ $(function () {
     /*搜索*/
     $dom.on('click', '.ipt-search', function () {
         getList()
+    })
+
+    /*分页功能*/
+    function renderPagination(page, pageCount) {
+        var options = {
+            bootstrapMajorVersion: 3,
+            currentPage: page,
+            numberOfPages: 5,
+            totalPages: pageCount || 10,
+            onPageClicked: function (event, originalEvent, type, page) {
+                var cPage, lastPage = parseInt($('.pagination .active a').text())
+                switch (type) {
+                    case 'first':
+                        cPage = 1
+                        break
+                    case 'prev':
+                        cPage = lastPage - 1
+                        break
+                    case 'next':
+                        cPage = lastPage + 1
+                        break
+                    case 'last':
+                        cPage = pageCount
+                        break
+                    default:
+                        cPage = page
+                }
+                getList(page)
+            },
+            /*onPageChanged: function () {
+             },*/
+        }
+        $('.pagination').bootstrapPaginator(options);
+    }
+
+    $dom.on('click', '.pageDropDown li', function (e) {
+        $('#pageSize').text($(this).text())
+        getList()
+    })
+    $dom.on('click', '.pagination li', function () {
+        var $this = $(this)
+        getList($this.text())
+        $this.addClass('active').siblings('li').removeClass('active')
+    })
+    $dom.on('click', '.userPageGo', function () {
+        var val = $('#userPageNumber').val()
+        getList(val)
     })
 
     /*注销*/

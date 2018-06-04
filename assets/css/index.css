@@ -143,20 +143,65 @@ footer {
   float: right;
   margin: 20px 8px 0;
 }
+#main-area .panel .bottom-operate .dropdown button {
+  padding: 6px 14px;
+  height: 35px;
+  box-shadow: none;
+  border-color: #ddd;
+}
+#main-area .panel .bottom-operate .dropdown button:focus {
+  background: #fff;
+}
 #main-area .panel .bottom-operate .input-group {
   float: right;
   width: 104px;
   margin: 20px 8px 0 0;
+  box-shadow: none;
+  overflow: hidden;
+  border-radius: 4px;
 }
 #main-area .panel .bottom-operate .input-group input {
   font-size: 16px;
+  height: 35px;
   text-align: center;
+  border-color: #ddd;
 }
 #main-area .panel .bottom-operate .input-group .input-group-addon {
   color: #333;
+  border-color: #ddd;
 }
 #main-area .panel .bottom-operate .page-nav {
   float: right;
+}
+#main-area .panel .bottom-operate .userPageGo {
+  cursor: pointer;
+  color: #fff !important;
+  background: #76d1ec;
+}
+#main-area .pagination li {
+  cursor: pointer;
+}
+#main-area .pagination li a {
+  padding: 6px 12px;
+}
+#main-area .pagination li a,
+#main-area .pagination li span {
+  color: #5bc0de;
+}
+#main-area .pagination li.active a,
+#main-area .pagination li.active span,
+#main-area .pagination li.active a:hover,
+#main-area .pagination li.active a:focus,
+#main-area .pagination li.active span:hover,
+#main-area .pagination li.active span:focus {
+  color: #fff;
+  cursor: pointer;
+  background-color: #76d1ec;
+  border-color: #72c7e0;
+}
+.layui-laydate .layui-laydate-content .layui-this {
+  background-color: #76d1ec !important;
+  color: #fff !important;
 }
 .layout-fullwidth #main-container .sidebar {
   left: -260px;
