@@ -278,6 +278,7 @@
             isOnline: navigator.onLine,
             isDev: window.location.href.indexOf('http://localhost') !== -1 || window.location.href.indexOf('http://192.168') !== -1,
             isWeixin: !!window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i),
+            isAlipay: !!window.navigator.userAgent.toLowerCase().match(/alipay/i),
             isWeibo: !!window.navigator.userAgent.toLowerCase().match(/WeiBo/i),
             isQq: !!window.navigator.userAgent.toLowerCase().match(/QQ/i),
             isIos: (window.navigator.userAgent.toLowerCase().match(/iphone|ipad|ipod/i)) ? true : false,
