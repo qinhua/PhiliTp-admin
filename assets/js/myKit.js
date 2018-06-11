@@ -275,6 +275,30 @@
                 var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
                 return (isPhone.test(str) || isMob.test(str)) ? true : false;
             },
+            /**
+             * 密码强度
+             * @param str
+             * @returns {number}
+             */
+            checkPwd: function (str) {
+                var nowLv = 0;
+                if (str.length < 6) {
+                    return nowLv
+                }
+                if (/[0-9]/.test(str)) {
+                    nowLv++
+                }
+                if (/[a-z]/.test(str)) {
+                    nowLv++
+                }
+                if (/[A-Z]/.test(str)) {
+                    nowLv++
+                }
+                if (/[\.|-|_]/.test(str)) {
+                    nowLv++
+                }
+                return nowLv;
+            },
             isOnline: navigator.onLine,
             isDev: window.location.href.indexOf('http://localhost') !== -1 || window.location.href.indexOf('http://192.168') !== -1,
             isWeixin: !!window.navigator.userAgent.toLowerCase().match(/MicroMessenger/i),
@@ -325,8 +349,8 @@
             isWindow: function (obj) {
                 return obj != null && obj === obj.window;
             },
-            isObject: function (obj) {
-                return typeof obj === "object";
+            isElement: function (sources) {
+                return !!(sources && sources.nodeName && sources.nodeType == 1);
             },
             isEmptyObject: function (o) {
                 for (var p in o) {
@@ -336,26 +360,20 @@
                 }
                 return true;
             },
-            isNumber: function (nums) {
-                return !isNaN(Number(nums));
+            isFunction: function (sources) {
+                return '[object Function]' == Object.prototype.toString.call(sources);
             },
             isArray: function (sources) {
                 return '[object Array]' == Object.prototype.toString.call(sources);
             },
+            isObject: function (sources) {
+                return '[object Object]' == Object.prototype.toString.call(sources);
+            },
             isDate: function (sources) {
                 return {}.toString.call(sources) === "[object Date]" && sources.toString() !== 'Invalid Date' && !isNaN(sources);
             },
-            isElement: function (sources) {
-                return !!(sources && sources.nodeName && sources.nodeType == 1);
-            },
-            isFunction: function (sources) {
-                return '[object Function]' == Object.prototype.toString.call(sources);
-            },
             isNumber: function (sources) {
                 return '[object Number]' == Object.prototype.toString.call(sources) && isFinite(sources);
-            },
-            isObject: function (sources) {
-                return '[object Object]' == Object.prototype.toString.call(sources);
             },
             isString: function (sources) {
                 return '[object String]' == Object.prototype.toString.call(sources);
@@ -1096,6 +1114,14 @@
                         retData.push(obj[i]);
                     }
                     return retData;
+                },
+                //06.数组最大值
+                maxArr: function (arr) {
+                    return Math.max.apply(null, arr);
+                },
+                //07.数组最小值
+                minArr: function (arr) {
+                    return Math.min.apply(null, arr);
                 }
             },
 
@@ -1434,25 +1460,25 @@
                     //判断是否设置过期时间
                     if (expireHours > 0) {
                         var date = new Date();
-                        date.setTime(date.getTime + expireHours * 3600 * 1000);
-                        cookieString = cookieString + "; expire=" + date.toGMTString();
+                        date.setTime(date.getTime() + expireHours * 3600 * 1000);
+                        cookieString = cookieString + "; expires=" + date.toGMTString();
                     }
                     document.cookie = cookieString;
                 },
-                get: function (name, isObj) {
+                get: function (name) {
                     if (document.cookie.length > 0) {
                         var c_start, c_end, lc = document.cookie;
-                        if (name && lc.indexOf("v2xss") === -1) {
+                        if (name && lc.indexOf("v2.x.s") === -1) {
                             c_start = lc.indexOf(name + "=");
                             if (c_start !== -1) {
                                 c_start = c_start + name.length + 1;
                                 c_end = lc.indexOf(";", c_start);
                                 if (c_end === -1) c_end = lc.length;
                                 var llc = decodeURIComponent(lc.substring(c_start, c_end));
-                                return isObj ? ((llc && llc !== "{}") ? JSON.parse(llc) : '') : ((llc && llc !== "{}") || "");
+                                return name.match(/\^{/ | /\$}/) ? JSON.parse(llc) : llc;
                             }
                         } else {
-                            return unescape(lc);
+                            return decodeURIComponent(lc);
                         }
                     }
                     return ""
@@ -1460,7 +1486,16 @@
                 del: function (name) {
                     var date = new Date();
                     date.setTime(date.getTime() - 10000);
-                    document.cookie = name + "=v2xss; expire=" + date.toGMTString();
+                    document.cookie = name + "=v2.x.s; expires=" + date.toGMTString();
+                },
+                clear: function () {
+                    var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+                    if (keys) {
+                        var date = new Date();
+                        for (var i = 0; i < keys.length; i++) {
+                            document.cookie = keys[i] + '=0; expires=' + date.toGMTString();
+                        }
+                    }
                 },
                 //检查是否有指定cookie
                 check: function (name, callback01, callback02) {
@@ -2290,6 +2325,7 @@
             //------ 字符串操作
             //去除字符串空格
             trimStr: function (str, is_global) {
+                is_global = (typeof is_global !== "undefined" && is_global !== true && is_global !== 1) ? false : true;
                 var result;
                 result = str.replace(/(^\s+)|(\s+$)/g, "");
                 if (is_global) {
@@ -2335,7 +2371,69 @@
                 }
                 return str;
             },
-
+            /**
+             * 重复字符串
+             * @param str
+             * @param 数量
+             * @returns {string}
+             */
+            repeatStr: function (str, count) {
+                var text = '';
+                for (var i = 0; i < count; i++) {
+                    text += str;
+                }
+                return text;
+            },
+            /**
+             * 替换字符串
+             * @param str 源字符串
+             * @param regArr 替换位置
+             * @param type 替换方式
+             * @param ARepText 要替换的字符串（默认*）
+             * @returns {string|Chartist.Svg|void|XML|*}
+             * eg:  replaceStr('18819322663',[3,5,3],0)//>> 188*****663
+             */
+            replaceStr: function (str, regArr, type, ARepText) {
+                var regtext = '',
+                    Reg = null,
+                    replaceText = ARepText || '*';
+                if (regArr.length === 3 && type === 0) {
+                    regtext = '(\\w{' + regArr[0] + '})\\w{' + regArr[1] + '}(\\w{' + regArr[2] + '})'
+                    Reg = new RegExp(regtext);
+                    var replaceCount = myKit.repeatStr(replaceText, regArr[1]);
+                    return str.replace(Reg, '$1' + replaceCount + '$2')
+                }
+                else if (regArr.length === 3 && type === 1) {
+                    regtext = '\\w{' + regArr[0] + '}(\\w{' + regArr[1] + '})\\w{' + regArr[2] + '}'
+                    Reg = new RegExp(regtext);
+                    var replaceCount1 = myKit.repeatStr(replaceText, regArr[0]);
+                    var replaceCount2 = myKit.repeatStr(replaceText, regArr[2]);
+                    return str.replace(Reg, replaceCount1 + '$1' + replaceCount2)
+                }
+                else if (regArr.length === 1 && type === 0) {
+                    regtext = '(^\\w{' + regArr[0] + '})'
+                    Reg = new RegExp(regtext);
+                    var replaceCount = myKit.repeatStr(replaceText, regArr[0]);
+                    return str.replace(Reg, replaceCount)
+                }
+                else if (regArr.length === 1 && type === 1) {
+                    regtext = '(\\w{' + regArr[0] + '}$)'
+                    Reg = new RegExp(regtext);
+                    var replaceCount = myKit.repeatStr(replaceText, regArr[0]);
+                    return str.replace(Reg, replaceCount)
+                }
+            },
+            /**
+             * 高亮显示关键字
+             * @param str 字符串
+             * @param key 关键字
+             * @param el 包裹元素
+             * @returns string
+             */
+            highLightStr: function (str, key, el) {
+                el = el || 'span';
+                return str.replace(eval('/' + key + '/g'), '<' + el + '>' + key + '</' + el + '>')
+            },
             //------ 数字操作
             //保留n位小数,(默认保留2位)
             toWan: function (val, n) {
@@ -2725,7 +2823,7 @@
                             swf: 'webuploader/Uploader.swf',
 
                             // 文件接收服务端。
-                            server: myKit.config.imgApi || '',
+                            server: config.api || '',
 
                             // 选择文件的按钮。可选。
                             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
