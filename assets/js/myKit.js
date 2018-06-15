@@ -2,12 +2,12 @@
 /**
  * Created by Chin on 2018/06/02
  */
-(function (global, factory) {
+(function(global, factory) {
 
     "use strict";
 
     if (typeof module === "object" && typeof module.exports === "object") {
-        module.exports = global.document ? factory(global, true) : function (w) {
+        module.exports = global.document ? factory(global, true) : function(w) {
             if (!w.document) {
                 throw new Error("myKit requires a window with a document");
             }
@@ -19,13 +19,13 @@
 
     // Pass this if window is not defined yet
 })(typeof window !== "undefined" ? window : this,
-    function (window, noGlobal) {
+    function(window, noGlobal) {
         //"use strict";
         var myKit = {
             localName: '',
             isPosting: false,
             //重复提交标识
-            hideLoading: function () {
+            hideLoading: function() {
                 $('.p-loading').hide();
                 $('.container').show();
             },
@@ -88,7 +88,7 @@
              * @param errCb errCb callback
              * @param timeOut ajax timeout
              */
-            loadData: function (url, params, method, dataType, async, beforeCb, successCb, errCb, timeOut) {
+            loadData: function(url, params, method, dataType, async, beforeCb, successCb, errCb, timeOut) {
                 $.ajax({
                     type: method || 'GET',
                     url: url,
@@ -105,15 +105,15 @@
                     //}),
                     data: params || '',
                     dataType: dataType || 'JSON',
-                    beforeSend: function () {
+                    beforeSend: function() {
                         beforeCb && beforeCb();
                     },
-                    success: function (data) {
+                    success: function(data) {
                         /*if(data.message){
                          }*/
                         successCb && successCb(data);
                     },
-                    error: function (err) {
+                    error: function(err) {
                         errCb && errCb(err);
                     }
                 });
@@ -125,9 +125,9 @@
              * @param cb 加载方法
              * @param pageSize 分页大小
              */
-            loadMore: function (ele, listEle, cb, pageSize) {
+            loadMore: function(ele, listEle, cb, pageSize) {
                 $(document).on("click", $(ele),
-                    function () {
+                    function() {
                         var curPage = ($(listEle).find("li").length) / pageSize;
                         if (curPage >= 1) {
                             cb(curPage + 1);
@@ -138,48 +138,56 @@
                         //}
                     })
             },
-
             /**
-             * 节流函数
-             * @param event 触发的事件(选填)
-             * @param func 高频操作
-             * @param wait 间隔时间
-             * @param immediate 是否立即执行
-             * @param ele 容器
+             * 防抖函数
+             * @param fn 高频函数
+             * @param wait 等待时间
+             * @returns {Function}
              */
-            throttle: function (event, func, wait, immediate, ele) {
-                function delayFun() {
-                    var timeout;
-                    return function () {
-                        var context = this,
-                            args = arguments;
-                        var later = function () {
-                            timeout = null;
-                            if (!immediate) func.apply(context, args);
-                        };
-                        var callNow = immediate && !timeout;
-                        clearTimeout(timeout);
-                        timeout = setTimeout(later, wait);
-                        if (callNow) func.apply(context, args);
-                    };
-                };
-
-                // 用法
-                var myEfficientFn = delayFun(func, 250);
-                if (event) {
-                    (ele ? document.querySelector(ele) : window).addEventListener(event, myEfficientFn);
-                } else {
-                    myEfficientFn()
+            debounce: function(fn, wait) {
+                var context = this,
+                    args = arguments,
+                    timer = null;
+                return function() {
+                    context = this;
+                    args = arguments;
+                    clearTimeout(timer);
+                    timer = setTimeout(function() {
+                        fn.apply(context, args);
+                    }, wait || 250);
                 }
             },
-
+            /**
+             * 节流函数
+             * @param fn 高频函数
+             * @param wait 等待时间
+             * @returns {Function}
+             */
+            throttle: function(fn, wait) {
+                var context, args, startTime = Date.parse(new Date()),
+                    timer;
+                //返回一个函数，形成闭包，持久化变量
+                return function() {
+                    context = this;
+                    args = arguments;
+                    var curTime = Date.parse(new Date());
+                    var remaining = (wait || 1000) - (curTime - startTime);
+                    clearTimeout(timer);
+                    if (remaining <= 0) { //如果是第一次调用，不用延迟执行
+                        fn.apply(context, args);
+                        startTime = Date.parse(new Date());
+                    } else { //延迟一段时间执行
+                        timer = setTimeout(fn, remaining);
+                    }
+                }
+            },
             /**
              * 摇一摇
              * @param thresholds
              * @param direction
              * @param callback
              */
-            shake: function (thresholds, direction, callback) {
+            shake: function(thresholds, direction, callback) {
                 var threshold = thresholds;
                 var last_update = 0,
                     lastArr = [];
@@ -190,7 +198,7 @@
                     last_y = 0,
                     last_z = 0;
 
-                var deviceMotionHandler = function (eventData) {
+                var deviceMotionHandler = function(eventData) {
                     //eventData.cancelBubble();
                     var acceleration = eventData.accelerationIncludingGravity;
                     var curTime = new Date().getTime();
@@ -205,7 +213,7 @@
                         if (speed > threshold) {
                             //alert("摇动了");
                             if (callback) {
-                                delay ? setTimeout(function () {
+                                delay ? setTimeout(function() {
                                         callback();
                                     },
                                     delay) : callback();
@@ -218,16 +226,16 @@
                     }
                 };
                 //绑定摇动事件
-                this.loadEvent = function () {
+                this.loadEvent = function() {
                     if (window.DeviceMotionEvent) {
                         window.addEventListener('devicemotion', deviceMotionHandler, false);
                     }
                 };
                 //移除摇动事件
-                this.detachEvent = function () {
+                this.detachEvent = function() {
                     window.removeEventListener('devicemotion');
                 };
-                this.getLastData = function () {
+                this.getLastData = function() {
                     return lastArr;
                 };
             },
@@ -236,21 +244,21 @@
              * @param targetId 目标id
              * @param hoverCls hover类
              */
-            hover: function (targetId, hoverCls) {
+            hover: function(targetId, hoverCls) {
                 var curObj = document.querySelector(targetId);
                 curObj.addEventListener('touchstart',
-                    function () {
+                    function() {
                         this.className += hoverCls;
                     },
                     false);
                 curObj.addEventListener('touchend',
-                    function () {
+                    function() {
                         this.className = '';
                     },
                     false);
             },
             //移动端click事件，若有input点击事件请勿使用
-            attachClick: function () {
+            attachClick: function() {
                 if (typeof FastClick !== 'undefined' && myKit.envir === 'prod') {
                     FastClick.attach(document.body);
                 }
@@ -263,13 +271,13 @@
             hasHan: /[\u4E00-\u9FA5]/g,
             hasEnglish: /[a-zA-Z]/g,
             idNumber: /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/,
-            checkStr: function (str) {
+            checkStr: function(str) {
                 if (escape(str).indexOf("%u") != -1) alert("不能含有汉字");
                 else if (str.match(/\D/) != null) {
                     alert('不能含有字母');
                 }
             },
-            checkPhone: function (str) {
+            checkPhone: function(str) {
                 str = str.trim();
                 var isPhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
                 var isMob = /^((\+?86)|(\(\+86\)))?(13[012356789][0-9]{8}|15[012356789][0-9]{8}|18[02356789][0-9]{8}|147[0-9]{8}|1349[0-9]{7})$/;
@@ -280,7 +288,7 @@
              * @param str
              * @returns {number}
              */
-            checkPwd: function (str) {
+            checkPwd: function(str) {
                 var nowLv = 0;
                 if (str.length < 6) {
                     return nowLv
@@ -309,7 +317,7 @@
             isAndroid: (window.navigator.userAgent.toLowerCase().match(/android/i)) ? true : false,
             isIosOrAndroid: (window.navigator.userAgent.toLowerCase().match(/iphone|ipad|ipod/i)) ? "ios" : (window.navigator.userAgent.toLowerCase().match(/android/i) ? "android" : "others"),
             //来自移动端还是PC端
-            isFrom: function () {
+            isFrom: function() {
                 var userAgentInfo = navigator.userAgent;
                 var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
                 var flag = false;
@@ -328,9 +336,9 @@
                 }
                 return source;
             },
-            isOnlineEvt: function () {
+            isOnlineEvt: function() {
                 window.addEventListener('load',
-                    function () {
+                    function() {
                         var status = document.getElementById("status");
 
                         function updateOnlineStatus(event) {
@@ -346,13 +354,13 @@
                         window.addEventListener('offline', updateOnlineStatus);
                     });
             },
-            isWindow: function (obj) {
+            isWindow: function(obj) {
                 return obj != null && obj === obj.window;
             },
-            isElement: function (sources) {
+            isElement: function(sources) {
                 return !!(sources && sources.nodeName && sources.nodeType == 1);
             },
-            isEmptyObject: function (o) {
+            isEmptyObject: function(o) {
                 for (var p in o) {
                     if (p !== undefined) {
                         return false;
@@ -360,32 +368,32 @@
                 }
                 return true;
             },
-            isFunction: function (sources) {
+            isFunction: function(sources) {
                 return '[object Function]' == Object.prototype.toString.call(sources);
             },
-            isArray: function (sources) {
+            isArray: function(sources) {
                 return '[object Array]' == Object.prototype.toString.call(sources);
             },
-            isObject: function (sources) {
+            isObject: function(sources) {
                 return '[object Object]' == Object.prototype.toString.call(sources);
             },
-            isDate: function (sources) {
+            isDate: function(sources) {
                 return {}.toString.call(sources) === "[object Date]" && sources.toString() !== 'Invalid Date' && !isNaN(sources);
             },
-            isNumber: function (sources) {
+            isNumber: function(sources) {
                 return '[object Number]' == Object.prototype.toString.call(sources) && isFinite(sources);
             },
-            isString: function (sources) {
+            isString: function(sources) {
                 return '[object String]' == Object.prototype.toString.call(sources);
             },
-            isBoolean: function (sources) {
+            isBoolean: function(sources) {
                 return typeof sources === 'boolean';
             },
-            isLeapYear: function (year) {
+            isLeapYear: function(year) {
                 return new Date(year).isLeapYear();
             },
             // 判断是否为隐私模式
-            isPrivacyMode: function () {
+            isPrivacyMode: function() {
                 var testV = +new Date();
                 var result = false;
                 try {
@@ -406,7 +414,7 @@
              * @param start 起点
              * @param end 终点
              */
-            mixStr: function (str, mixStr, start, end) {
+            mixStr: function(str, mixStr, start, end) {
                 mixStr = mixStr || "***";
                 return str.replace(str.slice(start, end), mixStr)
             },
@@ -414,8 +422,8 @@
              * 设置标题
              * @param str
              */
-            setTitle: function (str) {
-                setTimeout(function () {
+            setTitle: function(str) {
+                setTimeout(function() {
                         document.title = str || '';
                     },
                     300)
@@ -427,16 +435,16 @@
                 paramStr: location.search,
                 hash: location.hash
             },
-            reload: function (force) {
+            reload: function(force) {
                 location.reload(force || true)
             },
             // 获取地址栏hash
-            getHash: function () {
+            getHash: function() {
                 var hash = {};
                 var HrefHasgParams = window.location.hash && window.location.hash.replace(/^\#/, '').split('&');
 
                 for (var i = 0,
-                         len = HrefHasgParams.length; i < len; i++) {
+                        len = HrefHasgParams.length; i < len; i++) {
                     var sps = HrefHasgParams[i].split('=');
                     hash[decodeURIComponent(sps[0])] = sps[1] ? decodeURIComponent(sps[1]) : '';
                 }
@@ -445,7 +453,7 @@
             },
 
             // 获取当前url的文件名，比如 www.xxx.com/path/abc.html?a=1&b=2 中的  abc
-            getURLFile: function () {
+            getURLFile: function() {
                 var href = window.location.href;
                 return /\.html\??/.test(href) ? href.match(/\/([^/] + )\.html /)[1] : 'index';
             },
@@ -454,10 +462,10 @@
              * 获取地址栏参数
              * @returns obj
              */
-            getURLParams: function () {
+            getURLParams: function() {
                 var params = {};
                 window.location.href.replace(/[#|?&]+([^=#|&]+)=([^#|&]*)/gi,
-                    function (m, key, value) {
+                    function(m, key, value) {
                         params[key] = decodeURIComponent(value);
                     });
                 return params;
@@ -467,7 +475,7 @@
              * 获取本地存储的参数
              * @returns obj
              */
-            getLocalParams: function () {
+            getLocalParams: function() {
                 var paramsLocal = "bps" + myKit.config.topicId;
                 var bp = myKit.locals.get(paramsLocal) || {};
                 var urlParams = myKit.getURLParams();
@@ -484,10 +492,11 @@
             },
 
             // 对象转参数字符串
-            param: function (obj, prefix) {
+            param: function(obj, prefix) {
                 var retData = [];
                 for (var e in obj) {
-                    if (typeof obj[e] === 'object') for (var i = 0; i < obj[e].length; i++) retData.push(e + '=' + encodeURIComponent(obj[e][i]));
+                    if (typeof obj[e] === 'object')
+                        for (var i = 0; i < obj[e].length; i++) retData.push(e + '=' + encodeURIComponent(obj[e][i]));
                     else retData.push(e + '=' + encodeURIComponent(obj[e]));
                 }
                 return (prefix || '') + retData.join('&');
@@ -499,7 +508,7 @@
              * @param encode
              * @returns {string}
              */
-            urlEncode: function (param, key, encode) {
+            urlEncode: function(param, key, encode) {
                 if (param == null) return '';
                 var paramStr = '';
                 var t = typeof(param);
@@ -518,24 +527,24 @@
              * @param url
              * @returns {string}
              */
-            urlDecode: function (url) {
+            urlDecode: function(url) {
                 return decodeURIComponent(url);
             },
 
             // 获取浏览历史
-            getHistory: function (callback) {
+            getHistory: function(callback) {
                 // window.addEventListener('popstate', function(e) {
                 callback ? callback() : null;
                 return history.state;
                 // }, false)
             },
             // 不刷新改变url地址
-            setUrl: function (params, title, page) {
+            setUrl: function(params, title, page) {
                 var currentState = history.state;
                 window.history.pushState(params, title, page);
             },
             // 重置url地址
-            resetUrl: function (title, page) {
+            resetUrl: function(title, page) {
                 var currentState = history.state;
                 window.history.replaceState(null, title, page);
             },
@@ -545,7 +554,7 @@
              * @param url 地址
              * @param params 参数(默认传递地址上的参数，为-1时不传递任何参数)
              */
-            jumpTo: function (url, params, delay) {
+            jumpTo: function(url, params, delay) {
                 var paramStr = '';
                 if (params !== -1) {
                     var urlParams = myKit.getURLParams();
@@ -554,19 +563,19 @@
                 } else {
                     paramStr = '';
                 }
-                setTimeout(function () {
+                setTimeout(function() {
                         window.location = url + (paramStr ? '?' : '') + paramStr;
                     },
                     delay || 0)
             },
             // 返回某一页
-            pageBack: function (pageNum, isRefresh) {
+            pageBack: function(pageNum, isRefresh) {
                 if (history.length > 1) {
                     isRefresh ? self.location = document.referrer : null;
                     pageNum ? history.go(pageNum) : history.go(-1);
                 }
             },
-            openWin: function (url, title, h, w, t, l, tool, menu, scro, resize, loc, sta) {
+            openWin: function(url, title, h, w, t, l, tool, menu, scro, resize, loc, sta) {
                 window.open(url, title, "height=" + h || 0 + ", width=" + w || 0 + ", top=" + h || 0 + "t, left=" + l || 0 + "+,toolbar=" + tool || 'no' + ", menubar=" + menu || 'no' + ", scrollbars=" + scro || 'no' + ", resizable=resize" + ", location=" + loc || 'no' + ", status=" + sta || 'no');
             },
             mesAray: ['提交中，请稍等', '提交成功', '提交失败, 请稍后再试', '请勿重复提交', '获取失败！'],
@@ -575,7 +584,7 @@
              * @param msg 等于'ko'时为关闭
              * @param autoHide 等于-1时不自动关闭
              */
-            lightPop: function (msg, autoHide, cb) {
+            lightPop: function(msg, autoHide, cb) {
                 if (msg === "ko") {
                     document.querySelector('#j-fixedTip').style.display = "none";
                     return false;
@@ -591,7 +600,7 @@
                 clearTimeout(lightTimeOut);
                 cb ? cb() : null;
                 if (autoHide === -1) return false;
-                lightTimeOut = setTimeout(function () {
+                lightTimeOut = setTimeout(function() {
                         document.querySelector('#j-fixedTip').style.display = "none";
                     },
                     2000);
@@ -599,7 +608,7 @@
 
             //获取用户设备信息/默认参数
             getInfo: {
-                navi: function () {
+                navi: function() {
                     var navis = {
                         appCodeName: navigator.appCodeName,
                         appName: navigator.appName,
@@ -615,18 +624,18 @@
                     };
                     return navis;
                 },
-                scr: function () {
+                scr: function() {
                     var scrs = {
                         width: screen.width,
                         height: screen.height
                     };
                     return scrs;
                 },
-                storeBp: function () {
+                storeBp: function() {
                     var token = "bps" + myKit.config.topicId;
                     localStorage.setItem(token, JSON.stringify(myKit.getURLParams()));
                 },
-                baseParas: function (obj) {
+                baseParas: function(obj) {
                     var bp = {};
                     var token = "bps" + myKit.config.topicId;
                     var urlParams = JSON.parse(localStorage.getItem(token));
@@ -639,7 +648,7 @@
                 }
             },
             //ajax请求
-            ajaxs: function (type, url, data, callback01, callback02, callback03, callback04) {
+            ajaxs: function(type, url, data, callback01, callback02, callback03, callback04) {
                 $.ajax({
                     type: type,
                     //请求方式
@@ -651,48 +660,48 @@
                     //请求是否异步，默认为异步
                     data: data,
                     //参数值
-                    beforeSend: function () {
+                    beforeSend: function() {
                         //请求前的处理
                         callback01();
                     },
-                    success: function (req) {
+                    success: function(req) {
                         //请求成功时处理
                         callback02(req);
                     },
-                    complete: function (req) {
+                    complete: function(req) {
                         //请求完成的处理
                         callback03();
                     },
-                    error: function (req) {
+                    error: function(req) {
                         //请求出错处理
                         callback04(req);
                     }
                 });
             },
             //ajaxDef---jquery Deferred
-            deferrsed: function (type, url, callback) {
-                var getData = function () {
-                    return $.Deferred(function (dtd) {
+            deferrsed: function(type, url, callback) {
+                var getData = function() {
+                    return $.Deferred(function(dtd) {
                         myKit.ajaxs(type, url, data, 0,
-                            function () {
+                            function() {
                                 dtd.resolve(data);
                             },
                             0,
-                            function () {
+                            function() {
                                 dtd.reject(data);
                             })
                         return dtd.promise();
                     });
                 };
 
-                getData().then(function (dtd) {
+                getData().then(function(dtd) {
                     callback ? callback() : null;
                 })
             },
             //判断手机横竖屏状态：
-            checkOrientation: function (callback01, callback02) {
+            checkOrientation: function(callback01, callback02) {
                 window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize",
-                    function () {
+                    function() {
                         if (window.orientation === 180 || window.orientation === 0) {
                             //alert('竖屏状态！');
                             callback01();
@@ -705,8 +714,8 @@
                     false);
             },
             //强制禁用屏幕旋转
-            lockOrientation: function () {
-                $(document).ready(function () {
+            lockOrientation: function() {
+                $(document).ready(function() {
                     function reorient(e) {
                         var portrait = (window.orientation % 180 == 0);
                         $("body > div").css("-webkit-transform", !portrait ? "rotate(-90deg)" : "");
@@ -717,10 +726,10 @@
                 })
             },
             // 强制横屏展示（触发重新计算）
-            forceOrientation: function () {
+            forceOrientation: function() {
                 var evt = "onorientationchange" in window ? "orientationchange" : "resize";
                 window.addEventListener(evt,
-                    function () {
+                    function() {
                         var width = document.documentElement.clientWidth;
                         var height = document.documentElement.clientHeight;
                         var $print = $('#print');
@@ -749,29 +758,29 @@
              * @param time
              * @param ele
              */
-            verCodeBtn: function (time, ele, cb) {
+            verCodeBtn: function(time, ele, cb) {
                 var timer = null;
                 var secs = parseInt(time) || 60;
                 var btn = typeof ele !== "string" ? ele : $(ele);
                 btn.addClass("disabled").prop("disabled", true);
                 myKit.lightPop("已发送，注意查收短信！");
                 !
-                    function beginCount() {
-                        if (secs >= 0) {
-                            btn.text(secs + 'S后再次获取');
-                            secs--;
-                        }
-                        timer = setTimeout(function () {
-                                beginCount();
-                                if (secs < 0) {
-                                    btn.removeClass("disabled").text('获取验证码').prop("disabled", false);
-                                    cb ? cb() : null;
-                                    clearTimeout(timer);
-                                    return;
-                                }
-                            },
-                            1000);
-                    }();
+                function beginCount() {
+                    if (secs >= 0) {
+                        btn.text(secs + 'S后再次获取');
+                        secs--;
+                    }
+                    timer = setTimeout(function() {
+                            beginCount();
+                            if (secs < 0) {
+                                btn.removeClass("disabled").text('获取验证码').prop("disabled", false);
+                                cb ? cb() : null;
+                                clearTimeout(timer);
+                                return;
+                            }
+                        },
+                        1000);
+                }();
                 //静态版
                 //btn.addClass("disabled").text('1分钟后再次获取').prop("disabled", true);
                 //myKit.lightPop("已发送，注意查收短信！");
@@ -781,7 +790,7 @@
             },
             /*显示网易验证码*/
             //<script src="//cstaticdun.126.net/load.min.js"></script>
-            showNetCaptcha: function (cb) {
+            showNetCaptcha: function(cb) {
                 myKit.closePop();
                 myKit.showPop('', 'pop-capcha');
 
@@ -790,23 +799,21 @@
                         element: '.pop-capcha .content',
                         mode: 'embed',
                         width: 300,
-                        onReady: function (instance) {
+                        onReady: function(instance) {
                             // 验证码一切准备就绪，此时可正常使用验证码的相关功能
                         },
-                        onVerify: function (err, data) {
+                        onVerify: function(err, data) {
                             cb && cb(err, data);
                         }
                     },
-                    function (instance) {
-                    },
-                    function (err) {
-                    });
+                    function(instance) {},
+                    function(err) {});
             },
 
             /**
              * 显示/关闭弹窗
              */
-            showPop: function (msg, cls, popHeight, cb, closeCb) {
+            showPop: function(msg, cls, popHeight, cb, closeCb) {
                 var popStr = '<div id="pop" class="pop ' + (cls || '') + '">' + '<div class="pop-out"><div class="pop-in fadeInUp"><div' + (popHeight ? 'style="max-height: ' + popHeight + 'px;' : '') + ' class="content ' + (popHeight ? 'overflow' : '') + '">' + msg + '</div><span class="js-closepop iconClose"><i>×</i></span></div></div></div>';
                 $('body').append(popStr);
                 $('html,body').addClass('disable-scroll');
@@ -814,14 +821,14 @@
                 $pop.addClass('on');
                 cb && cb();
                 $(document).on('click', '#pop .js-closepop, #pop .btn-close, #pop .btn-cancel',
-                    function (e) {
+                    function(e) {
                         e.stopPropagation();
                         $('#pop').remove();
                         $('html,body').removeClass('disable-scroll');
                         closeCb && closeCb();
                     });
             },
-            closePop: function (cb) {
+            closePop: function(cb) {
                 $('#pop').remove();
                 $('html,body').removeClass('disable-scroll');
                 cb && cb();
@@ -831,7 +838,7 @@
              * 滑动到某处
              * @param config{ele:滚动元素，value:scrollTop值,time:过度时间}
              */
-            scroll: function (config) {
+            scroll: function(config) {
                 var sets = $.extend({
                         ele: "html,body",
                         value: 0,
@@ -847,7 +854,7 @@
              * 返回顶部
              * @param trigger,触发元素
              */
-            back2Top: function (trigger) {
+            back2Top: function(trigger) {
                 var clientH = document.documentElement.clientHeight || document.body.clientHeight,
                     scrollTop;
                 if (!trigger) {
@@ -857,8 +864,8 @@
                     trigger = ele;
                 }
                 document.addEventListener('scroll',
-                    function (e) {
-                        setTimeout(function () {
+                    function(e) {
+                        setTimeout(function() {
                                 e.stopPropagation();
                                 scrollTop = document.body.scrollTop || document.querySelector('html').scrollTop;
                                 if (scrollTop + clientH > clientH + 300) {
@@ -873,7 +880,7 @@
                     },
                     false);
                 trigger.addEventListener('click',
-                    function (e) {
+                    function(e) {
                         $("html,body").animate({
                                 scrollTop: 0
                             },
@@ -886,7 +893,7 @@
              * 滚动显示/隐藏按钮
              * @param trigger,触发元素
              */
-            scrollReveal: function (trigger, target) {
+            scrollReveal: function(trigger, target) {
                 var clientH = document.documentElement.clientHeight || document.body.clientHeight,
                     docH = $(document).height(),
                     scrollTop,
@@ -895,9 +902,9 @@
                 target ? (typeof target === 'string' ? targetPos = $(target).offset().top : target.offset().top) : null;
                 trigger.addClass('');
                 document.addEventListener('scroll',
-                    function (e) {
+                    function(e) {
                         e.stopPropagation();
-                        setTimeout(function () {
+                        setTimeout(function() {
                                 e.preventDefault();
                                 scrollTop = document.body.scrollTop || document.querySelector('html').scrollTop;
                                 if (!target) {
@@ -939,7 +946,7 @@
              </div>
              * */
             swiper: {
-                common: function (targetCls, direction) {
+                common: function(targetCls, direction) {
                     if (typeof Swiper != 'undefined') {
                         return new Swiper(targetCls || '.swiper-container', {
                             // Optional parameters
@@ -1005,7 +1012,7 @@
                         })
                     }
                 },
-                marquee: function (targetCls, direction) {
+                marquee: function(targetCls, direction) {
                     if (typeof Swiper != 'undefined') {
                         return new Swiper(targetCls || '.swiper-container', {
                             // Optional parameters
@@ -1036,7 +1043,7 @@
                  * @returns {number}
                  */
                 //01.简单数组正序排列
-                sortNumAray: function (a, b) {
+                sortNumAray: function(a, b) {
                     if (a < b) {
                         return -1; // a排在b的前面
                     } else if (a > b) {
@@ -1046,9 +1053,9 @@
                     }
                 },
                 // 生成从1到指定值的数组
-                generateArr: function (num) {
+                generateArr: function(num) {
                     var tmp = [];
-                    return (function () {
+                    return (function() {
                         tmp.unshift(num);
                         num--;
                         if (num > 0) {
@@ -1058,21 +1065,21 @@
                     }())
                 },
                 //02.数组随机排序
-                rndArr: function (arr) {
-                    return arr.sort(function () {
+                rndArr: function(arr) {
+                    return arr.sort(function() {
                         return Math.random() > 0.5 ? -1 : 1;
                     });
                 },
-                shuffle: function (arr) {
+                shuffle: function(arr) {
                     for (var j, x, i = arr.length; i; j = parseInt(Math.random() * i), x = arr[--i], arr[i] = arr[j], arr[j] = x);
                     return arr;
                 },
                 //03.随机从数组中取出一项
-                getRnm: function (arr) {
+                getRnm: function(arr) {
                     return arr[Math.floor(Math.random() * arr.length)];
                 },
                 //04.数组去重
-                uniqueArr: function (arr) {
+                uniqueArr: function(arr) {
                     //排序数组，形成队列
                     arr.sort(this.sortNumAray);
 
@@ -1089,10 +1096,10 @@
                     loop(arr.length - 1);
                     return arr;
                 },
-                liteArr: function (arr) {
+                liteArr: function(arr) {
                     var tmp = [];
                     for (var i = 0,
-                             len = arr.length; i < len; i++) {
+                            len = arr.length; i < len; i++) {
                         if (tmp.indexOf(arr[i]) === -1) {
                             tmp.unshift(arr[i])
                         }
@@ -1100,7 +1107,7 @@
                     return tmp;
                 },
                 // 05.拷贝数组
-                copyArr: function (arr, start, end) {
+                copyArr: function(arr, start, end) {
                     if (start) {
                         return arr.slice(start || 0, end);
                     } else {
@@ -1108,7 +1115,7 @@
                     }
                 },
                 // 对象转数组
-                toArray: function (obj) {
+                toArray: function(obj) {
                     var retData = [];
                     for (var i = 0; i < obj.length; i++) {
                         retData.push(obj[i]);
@@ -1116,18 +1123,18 @@
                     return retData;
                 },
                 //06.数组最大值
-                maxArr: function (arr) {
+                maxArr: function(arr) {
                     return Math.max.apply(null, arr);
                 },
                 //07.数组最小值
-                minArr: function (arr) {
+                minArr: function(arr) {
                     return Math.min.apply(null, arr);
                 }
             },
 
             Obj: {
                 // 拷贝对象
-                copy: function (obj, filter) {
+                copy: function(obj, filter) {
                     var b = {};
                     for (var i in a) {
                         if (filter) {
@@ -1141,7 +1148,7 @@
                     return b;
                 },
                 // 扩展对象
-                extend: function (obj, extData) {
+                extend: function(obj, extData) {
                     if (extData) {
                         for (var attr in extData) {
                             obj[attr] = extData[attr];
@@ -1151,7 +1158,7 @@
             },
 
             // 格式化json
-            formatJson: function (json) {
+            formatJson: function(json) {
                 var i = 0,
                     il = 0,
                     tab = "    ",
@@ -1222,11 +1229,11 @@
              */
             Rdn: {
                 //01.生成从1到任意值的数字
-                rdnTo: function (end) {
+                rdnTo: function(end) {
                     return parseInt(Math.random() * end + 1)
                 },
                 //02.生成从任意值到任意值的数字(start:起点，end:重点，isFloat:是否小数，fixNum:小数位)
-                rdnBetween: function (start, end, isFloat, fixNum) {
+                rdnBetween: function(start, end, isFloat, fixNum) {
                     if (!isFloat) {
                         return Math.floor(Math.random() * (end - start) + start);
                     } else {
@@ -1234,7 +1241,7 @@
                     }
                 },
                 //03.从数组中随机取出一些数（arr：原数组，len：需要取的个数）
-                rdnFromArr: function (arr, len) {
+                rdnFromArr: function(arr, len) {
                     var tmpArr = [];
                     if (len > 1) {
                         var copys = arr.slice(0);
@@ -1249,13 +1256,13 @@
                     return myKit.isArray(tmpArr) ? tmpArr.sort() : tmpArr;
                 },
                 //04.生成从任意值开始的指定个数字
-                rdnCustom: function (start, lens) {
+                rdnCustom: function(start, lens) {
                     var arr = [];
                     //给原始数组arr赋值
                     for (var i = 0; i < lens; i++) {
                         arr[i] = i + start;
                     }
-                    arr.sort(function () {
+                    arr.sort(function() {
                         return 0.5 - Math.random();
                     });
                     return arr;
@@ -1265,7 +1272,7 @@
                  * 生成随机增长的数字
                  * @returns {string}
                  */
-                rdnCountUp: function (baseNum, ratio, limit, cb) {
+                rdnCountUp: function(baseNum, ratio, limit, cb) {
                     var curNum, lastNum = parseInt(myKit.locals.get("meLstAniNum") || baseNum);
                     if (limit && (lastNum >= limit || 2000000)) {
                         lastNum = 12000;
@@ -1279,17 +1286,17 @@
                  * 生成随机颜色
                  * @returns {string}
                  */
-                rdmColor: function () {
-                    return "#" + (function (color) {
-                            return (color += "0123456789abcdef" [Math.floor(Math.random() * 16)]) && (color.length == 6) ? color : arguments.callee(color);
-                        })("");
+                rdmColor: function() {
+                    return "#" + (function(color) {
+                        return (color += "0123456789abcdef" [Math.floor(Math.random() * 16)]) && (color.length == 6) ? color : arguments.callee(color);
+                    })("");
                 },
                 /**
                  * 生成随机字符串
                  * @param len 长度
                  * @returns {string}
                  */
-                rdmStr: function (len) {
+                rdmStr: function(len) {
                     len = len || 32;
                     var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'; //默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1
                     var maxPos = $chars.length;
@@ -1306,7 +1313,7 @@
                  * @param threshold 阈值
                  * @returns {number}
                  */
-                getFakeCount: function (startTime, isUp, threshold) {
+                getFakeCount: function(startTime, isUp, threshold) {
                     threshold = threshold || 200;
                     isUp = isUp || true;
                     if (startTime) {
@@ -1324,7 +1331,7 @@
                  * @param pubTime 活动时间
                  * @returns {number}
                  */
-                genSignUpNum: function (timeInterval, storageName, pubTime) {
+                genSignUpNum: function(timeInterval, storageName, pubTime) {
                     var localTime = JSON.parse(localStorage.getItem(storageName));
                     var tempTimeAray = new Date().getTime();
 
@@ -1363,7 +1370,7 @@
             },
 
             // 生成guid
-            guid: function () {
+            guid: function() {
                 function S4() {
                     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
                 }
@@ -1371,38 +1378,38 @@
                 return (S4() + S4() + S4() + S4() + S4() + S4() + S4() + S4());
             },
 
-            formatTime: function (timeStr, fmt) {
+            formatTime: function(timeStr, fmt) {
                 fmt = fmt || "yyyy-MM-dd HH:mm:ss";
                 return new Date(timeStr).format(fmt);
             },
             //开发模式下
-            devTest: function (cb) {
-                ((window.location.href.indexOf('http://localhost') !== -1 || window.location.href.indexOf('http://192.168') !== -1) && cb) ? cb() : null;
+            devTest: function(cb) {
+                ((window.location.href.indexOf('http://localhost') !== -1 || window.location.href.indexOf('http://192.168') !== -1) && cb) ? cb(): null;
             },
 
             /**
              * 本地存储LocalStorage
              */
             locals: {
-                set: function (name, data) {
+                set: function(name, data) {
                     if (typeof data === "object") {
                         localStorage.setItem(name, JSON.stringify(data));
                     } else {
                         localStorage.setItem(name, data);
                     }
                 },
-                get: function (name, isObj) {
+                get: function(name, isObj) {
                     var ld = localStorage.getItem(name);
                     return isObj ? ((ld && ld !== "{}") ? JSON.parse(ld) : '') : ((ld && ld !== "{}") ? ld : "");
                 },
-                remove: function (name) {
+                remove: function(name) {
                     localStorage.removeItem(name);
                 },
-                clear: function () {
+                clear: function() {
                     localStorage.clear();
                 },
                 //检查是否有指定字段
-                check: function (name, callback01, callback02) {
+                check: function(name, callback01, callback02) {
                     var vals = localStorage.getItem(name);
                     if (!vals) {
                         // 有记录
@@ -1417,25 +1424,25 @@
              * 本地存储SessionStorage
              */
             sessions: {
-                set: function (name, data) {
+                set: function(name, data) {
                     if (typeof data === "object") {
                         sessionStorage.setItem(name, JSON.stringify(data));
                     } else {
                         sessionStorage.setItem(name, data);
                     }
                 },
-                get: function (name, isObj) {
+                get: function(name, isObj) {
                     var ld = sessionStorage.getItem(name);
                     return isObj ? ((ld && ld !== "{}") ? JSON.parse(ld) : '') : ((ld && ld !== "{}") ? ld : "");
                 },
-                remove: function (name) {
+                remove: function(name) {
                     sessionStorage.removeItem(name);
                 },
-                clear: function () {
+                clear: function() {
                     sessionStorage.clear();
                 },
                 //检查是否有指定字段
-                check: function (name, callback01, callback02) {
+                check: function(name, callback01, callback02) {
                     var vals = sessionStorage.getItem(name);
                     if (!vals) {
                         // 有记录
@@ -1450,7 +1457,7 @@
              * 本地存储Cookies
              */
             cookies: {
-                set: function (name, value, expireHours) {
+                set: function(name, value, expireHours) {
                     var cookieString;
                     if (typeof value === "object") {
                         cookieString = name + "=" + JSON.stringify(value);
@@ -1465,7 +1472,7 @@
                     }
                     document.cookie = cookieString;
                 },
-                get: function (name) {
+                get: function(name) {
                     if (document.cookie.length > 0) {
                         var c_start, c_end, lc = document.cookie;
                         if (name && lc.indexOf("v2.x.s") === -1) {
@@ -1483,12 +1490,12 @@
                     }
                     return ""
                 },
-                del: function (name) {
+                del: function(name) {
                     var date = new Date();
                     date.setTime(date.getTime() - 10000);
                     document.cookie = name + "=v2.x.s; expires=" + date.toGMTString();
                 },
-                clear: function () {
+                clear: function() {
                     var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
                     if (keys) {
                         var date = new Date();
@@ -1498,7 +1505,7 @@
                     }
                 },
                 //检查是否有指定cookie
-                check: function (name, callback01, callback02) {
+                check: function(name, callback01, callback02) {
                     var strs = myKit.cookies.get(name);
                     if (strs != null && strs != "") {
                         // 有记录
@@ -1516,12 +1523,12 @@
              * 清除本地缓存
              * <div class="btn flush-button" onclick="me.flush()">清理缓存</div>
              */
-            btnFlush: function () {
+            btnFlush: function() {
                 var btn = document.createElement('div');
                 btn.className = 'btn flush-button';
                 //btn.innerHTML = '清理缓存';
                 document.body.appendChild(btn)
-                btn.onclick = function () {
+                btn.onclick = function() {
                     myKit.locals.clear();
                     myKit.sessions.clear();
                     document.cookie = ''
@@ -1536,14 +1543,14 @@
              * @param isRender 是否渲染，传入布尔值
              * @param beforeCb 返回前的回调
              */
-            btnBack: function (cls, template, isRender, beforeCb) {
+            btnBack: function(cls, template, isRender, beforeCb) {
                 if (isRender !== 0 && isRender !== -1 && isRender !== false) {
                     var bar = document.createElement('div');
                     bar.className = 'topBar' + (cls ? ' ' + cls : '');
                     bar.innerHTML = template || '<button class="btn backButton" type="button"></button>';
                     document.body.appendChild(bar);
                     document.querySelector('.backButton').addEventListener('click',
-                        function () {
+                        function() {
                             beforeCb ? beforeCb() : null;
                             window.history.go(-1);
                         },
@@ -1555,7 +1562,7 @@
              * App下载
              * @param conf 配置
              */
-            appBar: function (conf) {
+            appBar: function(conf) {
                 var str;
                 var config = {
                     render: true,
@@ -1584,7 +1591,7 @@
                     str = '<div class="appBar' + (config.position === 'bottom' ? ' bottom' : '') + '"' + (config.bgColor ? ' style="background-color:' + config.bgColor + ';' : '') + '"><div class="a-wrap">' + '<img src="' + config.icon + '" alt="">' + '<div class="wrp"><h3>' + config.title + '</h3>' + '<p>' + config.description + '</p></div></div><button class="btn" id="btn-openApp" type="button">' + config.buttonText + '</button></div>';
                     document.body.innerHTML += str;
                     document.getElementById("btn-openApp").addEventListener('click',
-                        function () {
+                        function() {
                             if (config.onClick) {
                                 config.onClick();
                             } else {
@@ -1609,7 +1616,7 @@
             /**
              * 隐藏的分享信息
              */
-            shareInfo: function () {
+            shareInfo: function() {
                 var str = '<div class="share-info">' + '<h1>' + myKit.config.share.title + '</h1>' + '<p>' + myKit.config.share.description + '</p>' + '<img src="' + myKit.config.share.iconUrl + '" alt="' + myKit.config.share.title + '"></div>';
                 document.body.insertAdjacentHTML('afterbegin', str);
             },
@@ -1618,7 +1625,7 @@
              * @param txt 文案(默认为非微信中时显示)
              * @param flag 判断依据
              */
-            isWebTip: function (txt, flag) {
+            isWebTip: function(txt, flag) {
                 var str = '';
                 if (flag !== undefined && flag) {
                     str = '<div class="isWebTip"><i></i>&nbsp;' + (txt || '部分功能可能无法使用，建议在微信中打开') + '</div>';
@@ -1631,17 +1638,17 @@
             },
 
             // 计算时间消耗
-            timeCost: function (cb, alias) {
+            timeCost: function(cb, alias) {
                 console.time(alias);
                 cb ? cb() : null;
                 console.timeEnd(alias);
             },
             //时间戳转时间
-            getLocalTime: function (nS) {
+            getLocalTime: function(nS) {
                 return new Date(parseInt(nS) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
             },
             // 字节
-            byte: function (data) {
+            byte: function(data) {
                 if (typeof data === 'number') {
                     if (data < 1024) {
                         return data + 'B';
@@ -1663,7 +1670,7 @@
                 }
             },
             //1476012477000 to 2016 19:27:57
-            formatDate: function (now, isHans, level) {
+            formatDate: function(now, isHans, level) {
                 level = level || 3;
                 var data = new Date(now);
                 var year = data.getFullYear();
@@ -1683,7 +1690,7 @@
                 }
             },
             //获取年-月-日
-            getDates: function (data) {
+            getDates: function(data) {
                 var timeObj = {};
                 var y = data.getFullYear();
                 var m = data.getMonth() + 1;
@@ -1732,7 +1739,7 @@
              * @param d1
              * @returns {boolean}
              */
-            compareCurrentDate: function (d1) {
+            compareCurrentDate: function(d1) {
                 var timeNow = new Date().getTime();
                 return timeNow > new Date(d1).getTime();
             },
@@ -1743,9 +1750,9 @@
              * @param interval 刷新间隔
              * @returns {boolean}
              */
-            keepFresh: function (endTime, cb, interval) {
+            keepFresh: function(endTime, cb, interval) {
                 var timer = null;
-                timer = setInterval(function () {
+                timer = setInterval(function() {
                         if (myKit.compareCurrentDate(endTime)) {
                             cb ? cb() : null;
                             clearInterval(timer)
@@ -1759,7 +1766,7 @@
              * @param d2
              * @returns {boolean}
              */
-            compareDateBetween: function (d1, d2) {
+            compareDateBetween: function(d1, d2) {
                 var timeA = new Date(d1.replace(/-/g, "\/"));
                 var timeB = new Date(d2.replace(/-/g, "\/"));
                 var timeNow = new Date();
@@ -1776,7 +1783,7 @@
              * @param obj 时分秒父级元素
              */
             //单个倒计时
-            getRCount: function (target, box) {
+            getRCount: function(target, box) {
                 //console.log(arguments);//最好直接传入数字类型
                 var t, d, h, m, s;
                 //var $days = $(".days");
@@ -1818,13 +1825,13 @@
                     clearTimeout(timer);
                     return; //此处记得使用return停止函数体
                 }
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                         myKit.getRCount(target, box)
                     },
                     1000);
             },
             //传入毫秒数时
-            getMsCount: function (msd) {
+            getMsCount: function(msd) {
                 //console.log(arguments);//最好直接传入数字类型
                 var t, d, h, m, s;
                 var $days = $(".days");
@@ -1862,7 +1869,7 @@
                     return; //一定要return才能停止
                 }
                 msd -= 1000;
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                         myKit.getMsCount(msd)
                     },
                     1000);
@@ -1879,7 +1886,7 @@
              <li class="secs">10</li>
              </ol>
              */
-            getMRCount: function (target, obj, isMillis, timeoutCb) {
+            getMRCount: function(target, obj, isMillis, timeoutCb) {
                 var t, d, h, m, s;
                 var $days = obj.find(".days");
                 var $hours = obj.find(".hours");
@@ -1964,7 +1971,7 @@
                     }
                 }
 
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                         isMillis ? myKit.getMRCount(target, obj, 1, timeoutCb) : myKit.getMRCount(target, obj, timeoutCb);
                     },
                     1000);
@@ -1975,10 +1982,10 @@
              * @param 目标时间
              * @returns {*}
              */
-            timePast: function (o) {
+            timePast: function(o) {
                 var rules = /^[\d]{4}-[\d]{1,2}-[\d]{1,2}( [\d]{1,2}:[\d]{1,2}(:[\d]{1,2})?)?$/ig,
                     str = '',
-                //结果字符串
+                    //结果字符串
                     conn, s;
                 var result; //"-"分割结果
                 var hans = ["天前", "小时前", "分钟前", "秒前"];
@@ -2015,7 +2022,7 @@
                 //几天前/几小时前/几分钟前/几秒前
                 result = str.slice(0, -1).split("-");
                 for (var j = 0,
-                         len = result.length; j < len; j++) {
+                        len = result.length; j < len; j++) {
                     if (result[j] != "0") {
                         gaps = result[j] + hans[j];
                         return gaps;
@@ -2028,7 +2035,7 @@
              * @param time 时间(00:00:00)
              * @returns {string} 时间戳（单位：秒）
              */
-            timeToSec: function (time) {
+            timeToSec: function(time) {
                 var s = '';
                 var hour = time.split(':')[0];
                 var min = time.split(':')[1];
@@ -2041,7 +2048,7 @@
              * @param timeStamp
              * @returns {*}
              */
-            niceTime: function (timeStamp) {
+            niceTime: function(timeStamp) {
                 var date = new Date(timeStamp);
                 var now = new Date();
 
@@ -2068,7 +2075,7 @@
              * @param obj
              * @param time
              */
-            counter: function (obj, time) {
+            counter: function(obj, time) {
                 var initTime = time;
 
                 function timer() {
@@ -2092,7 +2099,7 @@
              * @param 结束时间
              * @returns {number}
              */
-            getDayDiff: function (startDate, endDate) {
+            getDayDiff: function(startDate, endDate) {
                 var startTime = typeof startDate === "string" ? new Date(Date.parse(startDate.replace(/-/g, "/"))).getTime() : startDate.getTime();
                 var endTime = typeof endDate === "string" ? new Date(Date.parse(endDate.replace(/-/g, "/"))).getTime() : endDate.getTime();
                 var dates = Math.floor(Math.abs((startTime - endTime)) / (1000 * 60 * 60 * 24));
@@ -2100,7 +2107,7 @@
             },
 
             // 活动是否过期
-            isActEnd: function () {
+            isActEnd: function() {
                 var now = new Date().getTime(); //取今天的日期
                 var end = new Date(endTime).getTime();
                 if (now > end) return false;
@@ -2119,7 +2126,7 @@
              <span class="vx_minus">-</span>
              </div>
              */
-            vNumber: function (conf, cb, addCb, minCb, iptCb) {
+            vNumber: function(conf, cb, addCb, minCb, iptCb) {
                 var $vadd = document.querySelector('.vx-number .vx_add')
                 var $vminus = document.querySelector('.vx-number .vx_minus')
                 var $vipt = document.querySelector('.vx-number .vx_ipt')
@@ -2140,7 +2147,7 @@
                 $vipt.value = config.amount;
 
                 $vadd.addEventListener('click',
-                    function (e) {
+                    function(e) {
                         e.cancelable && !e.defaultPrevented ? e.preventDefault() : null;
                         if (config.amount > config.max) {
                             me.lightPop('最大为' + config.max);
@@ -2155,7 +2162,7 @@
                     },
                     false)
                 $vminus.addEventListener('click',
-                    function (e) {
+                    function(e) {
                         e.cancelable && !e.defaultPrevented ? e.preventDefault() : null;
                         if (config.amount <= config.min) {
                             me.lightPop('最小为' + config.min);
@@ -2170,9 +2177,9 @@
                     },
                     false)
                 $vipt.addEventListener('input',
-                    function (e) {
+                    function(e) {
                         e.cancelable && !e.defaultPrevented ? e.preventDefault() : null;
-                        setTimeout(function () {
+                        setTimeout(function() {
                                 config.amount = parseInt($vipt.value);
                                 $vipt.value = config.amount;
                                 iptCb ? iptCb(config.amount) : null;
@@ -2194,17 +2201,17 @@
             },
 
             // 小数乘法
-            floatMulti: function (num1, num2) {
+            floatMulti: function(num1, num2) {
                 return num1 * 10000 * num2 / 10000;
             },
             // 禁止滑动
-            cancleScroll: function (obj) {
+            cancleScroll: function(obj) {
                 //document.addEventListener('touchmove', function (e) {
                 //    e.preventDefault();
                 //    return false;
                 //}, false);
                 obj.on("touchmove",
-                    function (e) {
+                    function(e) {
                         e.preventDefault();
                         return false;
                     });
@@ -2213,7 +2220,7 @@
              * 可编辑div聚焦并移到最后
              * @param that
              */
-            selLast: function (that) {
+            selLast: function(that) {
                 var range = document.createRange();
                 var len = that.childNodes.length;
                 range.setStart(that, len);
@@ -2222,7 +2229,7 @@
                 that.focus();
             },
             //获取鼠标当前坐标
-            mouseCoords: function (ev) {
+            mouseCoords: function(ev) {
                 if (ev.pageX || ev.pageY) {
                     return {
                         x: ev.pageX,
@@ -2241,7 +2248,7 @@
              * @returns {*}
              */
             //获取样式值
-            getStyle: function (obj, styleName) {
+            getStyle: function(obj, styleName) {
                 return window.getComputedStyle(obj, null).styleName || obj.currentStyle.styleName
             },
             /**
@@ -2249,7 +2256,7 @@
              * @param o
              * @returns {*}
              */
-            getObjLen: function (o) {
+            getObjLen: function(o) {
                 var t = typeof o;
                 if (t == 'string') {
                     return o.length;
@@ -2263,7 +2270,7 @@
                 return false;
             },
             //过滤对象中自带属性
-            exceptOwnProperty: function (obj) {
+            exceptOwnProperty: function(obj) {
                 if (obj && myKit.isObject(obj)) {
                     var tmpObj = {}
                     for (var i in obj) {
@@ -2279,7 +2286,7 @@
              * @param xml
              * @returns {{}}
              */
-            xmlToJson: function (xml) {
+            xmlToJson: function(xml) {
                 // Create the return object
                 var obj = {};
                 if (xml.nodeType == 1) { // element
@@ -2318,13 +2325,13 @@
              * @param func
              * @param time
              */
-            timeOut: function (func, time) {
+            timeOut: function(func, time) {
                 setTimeout(func, time)
             },
 
             //------ 字符串操作
             //去除字符串空格
-            trimStr: function (str, is_global) {
+            trimStr: function(str, is_global) {
                 is_global = (typeof is_global !== "undefined" && is_global !== true && is_global !== 1) ? false : true;
                 var result;
                 result = str.replace(/(^\s+)|(\s+$)/g, "");
@@ -2334,7 +2341,7 @@
                 return result;
             },
             //将数字/字符转换为配速格式(2'55'')
-            toPace: function (data) {
+            toPace: function(data) {
                 data = (typeof data === 'number' ? data + "" : data).split(".");
                 if (data.length > 1) {
                     return data[0] + "'" + data[1] + "\"";
@@ -2343,7 +2350,7 @@
                 }
             },
             //字符串中指定位置插入字符
-            insertStr: function (str, flg, sn) {
+            insertStr: function(str, flg, sn) {
                 var newstr = "";
                 for (var i = 0; i < str.length; i += sn) {
                     var tmp = str.substring(i, i + sn);
@@ -2352,7 +2359,7 @@
                 return newstr;
             },
             //删除指定位置的字符 x-删除的位置 num--删除字符的个数
-            delStr: function (str, x, num) {
+            delStr: function(str, x, num) {
                 return str.substring(0, x) + str.substring(x + num, str.length);
             },
             /**
@@ -2363,7 +2370,7 @@
              * @param end 插入的终点，默认值同start
              * @returns {string|*}
              */
-            ellipsis: function (str, len, start, end) {
+            ellipsis: function(str, len, start, end) {
                 start = start || 0;
                 str = (typeof(str)) != "String" ? str + '' : str;
                 if (str.length > len) {
@@ -2377,7 +2384,7 @@
              * @param 数量
              * @returns {string}
              */
-            repeatStr: function (str, count) {
+            repeatStr: function(str, count) {
                 var text = '';
                 for (var i = 0; i < count; i++) {
                     text += str;
@@ -2393,7 +2400,7 @@
              * @returns {string|Chartist.Svg|void|XML|*}
              * eg:  replaceStr('18819322663',[3,5,3],0)//>> 188*****663
              */
-            replaceStr: function (str, regArr, type, ARepText) {
+            replaceStr: function(str, regArr, type, ARepText) {
                 var regtext = '',
                     Reg = null,
                     replaceText = ARepText || '*';
@@ -2402,21 +2409,18 @@
                     Reg = new RegExp(regtext);
                     var replaceCount = myKit.repeatStr(replaceText, regArr[1]);
                     return str.replace(Reg, '$1' + replaceCount + '$2')
-                }
-                else if (regArr.length === 3 && type === 1) {
+                } else if (regArr.length === 3 && type === 1) {
                     regtext = '\\w{' + regArr[0] + '}(\\w{' + regArr[1] + '})\\w{' + regArr[2] + '}'
                     Reg = new RegExp(regtext);
                     var replaceCount1 = myKit.repeatStr(replaceText, regArr[0]);
                     var replaceCount2 = myKit.repeatStr(replaceText, regArr[2]);
                     return str.replace(Reg, replaceCount1 + '$1' + replaceCount2)
-                }
-                else if (regArr.length === 1 && type === 0) {
+                } else if (regArr.length === 1 && type === 0) {
                     regtext = '(^\\w{' + regArr[0] + '})'
                     Reg = new RegExp(regtext);
                     var replaceCount = myKit.repeatStr(replaceText, regArr[0]);
                     return str.replace(Reg, replaceCount)
-                }
-                else if (regArr.length === 1 && type === 1) {
+                } else if (regArr.length === 1 && type === 1) {
                     regtext = '(\\w{' + regArr[0] + '}$)'
                     Reg = new RegExp(regtext);
                     var replaceCount = myKit.repeatStr(replaceText, regArr[0]);
@@ -2430,13 +2434,13 @@
              * @param el 包裹元素
              * @returns string
              */
-            highLightStr: function (str, key, el) {
+            highLightStr: function(str, key, el) {
                 el = el || 'span';
                 return str.replace(eval('/' + key + '/g'), '<' + el + '>' + key + '</' + el + '>')
             },
             //------ 数字操作
             //保留n位小数,(默认保留2位)
-            toWan: function (val, n) {
+            toWan: function(val, n) {
                 var num = n || 2;
                 val = typeof val != "Number" ? parseInt(val) : val;
                 return val >= 10000 ? (val / 10000).toFixed(num) : val;
@@ -2444,14 +2448,14 @@
             /**数字前面自动补充数字或字符
              * num--传入的数字，--需要补充的内容，n--需要的字符长度
              */
-            prefixNum: function (num, pre, n) {
+            prefixNum: function(num, pre, n) {
                 return parseInt((Array(n).join(pre) + num).slice(-n));
             },
             /**
              * 数字格式转换成千分位分隔（1234567.00转换为1,234,567.00）
              *@param num
              */
-            numToThousand: function (num, fixNum) {
+            numToThousand: function(num, fixNum) {
                 if ((num + "").trim() == "") {
                     return "";
                 }
@@ -2485,7 +2489,7 @@
              * 千分位字符转换成数字格式（1,234,567.00转换为1234567.00）
              *@param str
              */
-            thousandToNum: function (str) {
+            thousandToNum: function(str) {
                 var num = $.trim(str);
                 var ss = num.toString();
                 if (ss.length == 0) {
@@ -2498,7 +2502,7 @@
              * @param num
              * @returns {string}
              */
-            numToChinese: function (num) {
+            numToChinese: function(num) {
                 var AA = new Array("零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖");
                 var BB = new Array("", "拾", "百", "千", "万", "亿", "", "");
                 var CC = new Array("角", "分", "");
@@ -2532,8 +2536,7 @@
                     re += BB[6];
                     for (var i = 0; i < 2; i++) {
                         re += AA[a[1].charAt(i)] + CC[i];
-                    }
-                    ;
+                    };
                 }
 
                 return re;
@@ -2543,7 +2546,7 @@
              * @param num
              * @returns {*}
              */
-            getFullNum: function (num) {
+            getFullNum: function(num) {
                 //处理非数字
                 if (isNaN(num)) {
                     return num;
@@ -2559,7 +2562,7 @@
             /**
              *纯js评分
              */
-            rate: function (score) {
+            rate: function(score) {
                 var rate = score || 0;
                 return '★★★★★☆☆☆☆☆'.slice(5 - rate, 10 - rate)
             },
@@ -2568,15 +2571,15 @@
              * @param obj 对象
              * @param classFocus 高亮类名
              */
-            mHover: function (obj, classFocus) {
+            mHover: function(obj, classFocus) {
                 var curClass = obj.attr("class") || "";
                 obj.on("touchstart",
-                    function (e) {
+                    function(e) {
                         e.preventDefault();
                         obj.attr("class", curClass + "classFocus");
                     })
                 obj.on("touchend",
-                    function (e) {
+                    function(e) {
                         e.preventDefault();
                         obj.attr("class", curClass);
                     })
@@ -2591,23 +2594,22 @@
              * @param loop 是否循环，默认关闭
              * @param isCheckStatus 是否检查播放状态，默认检查
              */
-            playAudio: function (audioSrc, idName, toggleEle, autoPlay, loop, isCheckStatus) {
+            playAudio: function(audioSrc, idName, toggleEle, autoPlay, loop, isCheckStatus) {
                 var mediaA = document.createElement('audio');
                 mediaA.src = audioSrc;
                 mediaA.preload = true;
                 // mediaA.volume = 0.0;
                 // mediaA.muted = true; //是否静音（可用于预先播放加载音频）
                 mediaA.id = idName || 'bgm';
-                (loop === undefined && !loop) ? null : mediaA.loop = 'true';
-                (autoPlay === undefined || !autoPlay) ? null : mediaA.autoplay = 'true';
+                (loop === undefined && !loop) ? null: mediaA.loop = 'true';
+                (autoPlay === undefined || !autoPlay) ? null: mediaA.autoplay = 'true';
                 document.body.appendChild(mediaA);
                 mediaA.load();
-                if (autoPlay === undefined || !autoPlay) {
-                } else {
+                if (autoPlay === undefined || !autoPlay) {} else {
                     if (myKit.isWeixin) {
                         try {
                             document.addEventListener("WeixinJSBridgeReady",
-                                function () {
+                                function() {
                                     mediaA.play();
                                 },
                                 false)
@@ -2626,10 +2628,10 @@
              * @param ele 音乐开关元素
              * @param audioEle 音乐元素
              */
-            switchAudio: function (ele, audioEle) {
+            switchAudio: function(ele, audioEle) {
                 var music = $(audioEle)[0]; //获取ID;
                 $(ele).on('click',
-                    function () {
+                    function() {
                         var $this = $(this);
                         if ($this.hasClass('off')) {
                             $this.removeClass('off');
@@ -2646,13 +2648,13 @@
              * @param audio 音乐元素
              * @param toggleEle 音乐开关元素
              */
-            toggleSound: function (audio, toggleEle) {
+            toggleSound: function(audio, toggleEle) {
                 var music = $(audio)[0]; //获取ID
                 if (music.paused) { //判读是否播放
                     music.play();
                     $(toggleEle).removeClass("off");
                     $(document).on("touchstart",
-                        function () {
+                        function() {
                             toggleEle ? ($(toggleEle).hasClass("off") ? null : music.play()) : music.play(); //若有开关就判断，没有就播放
                         })
                 } else {
@@ -2668,7 +2670,7 @@
              * @param isMute 是否静音
              * @param cb cb
              */
-            swSound: function (audio, isClose, isMute, cb) {
+            swSound: function(audio, isClose, isMute, cb) {
                 try {
                     var that = document.querySelector(audio);
                     !isMute ? that.muted = false : null;
@@ -2681,7 +2683,7 @@
             },
 
             //iScroll无法点击问题修复
-            iScrollClick: function () {
+            iScrollClick: function() {
                 if (/iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent)) return false;
                 if (/Chrome/i.test(navigator.userAgent)) return (/Android/i.test(navigator.userAgent));
                 if (/Silk/i.test(navigator.userAgent)) return false;
@@ -2691,10 +2693,10 @@
                 }
             },
 
-            storeUser: function (key, obj) {
+            storeUser: function(key, obj) {
                 myKit.locals.set(key, obj);
             },
-            readUser: function (key, ele1, ele2) {
+            readUser: function(key, ele1, ele2) {
                 var data = myKit.locals.get(key); //获取本地用户信息
                 if (data !== null) {
                     data = JSON.parse(data);
@@ -2704,19 +2706,50 @@
             },
 
             //判断是否支持touch事件
-            hasTouch: function () {
+            hasTouch: function() {
                 var touchObj = {};
                 touchObj.isSupportTouch = "ontouchend" in document ? true : false;
                 touchObj.isEvent = touchObj.isSupportTouch ? "touchstart" : "click";
                 return touchObj.isEvent;
             },
+            /**
+             * 长按方法(默认2s算长按)
+             * @param ele 长按的元素id或类名
+             * @param cb 长按后的回调
+             */
+            longPress: function(cb, ele, delay) {
+                var curEvt = "ontouchend" in document ? ["touchstart", "touchend"] : ["mousedown", "mouseup"];
+                var timer = null,
+                    time = 0;
+                var obj = ele ? document.querySelector(ele) : window;
+                obj.addEventListener(curEvt[0], function(event) {
+                    var process = function() {
+                        clearTimeout(timer); //每次进来清除计时器
+                        //console.log(time);
+                        if (time < (delay || 2000)) {
+                            time += 1000;
+                            timer = setTimeout(process, 500);
+                        } else {
+                            console.info(">>长按了！");
+                            cb ? cb() : null;
+                            clearTimeout(timer); //长按时间达到：清除计时器
+                            time = 0;
+                        }
+                    }
+                    process();
+                }, false);
+                obj.addEventListener(curEvt[1], function(event) {
+                    clearTimeout(timer); //长按未触发：清除计时器
+                    time = 0;
+                }, false);
+            },
             //强制禁用整屏滚动
-            switchScroll: function (status) {
-                (status === -1) ? $("html,body").removeClass("disable-scroll") : $("html,body").addClass("disable-scroll");
+            switchScroll: function(status) {
+                (status === -1) ? $("html,body").removeClass("disable-scroll"): $("html,body").addClass("disable-scroll");
             },
             //requestAnimationFrame动画
             theRaf: {
-                activeRaf: function () {
+                activeRaf: function() {
                     var lastTime = 0;
                     var vendors = ['ms', 'moz', 'webkit', 'o'];
                     for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -2724,10 +2757,10 @@
                         window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
                     }
 
-                    if (!window.requestAnimationFrame) window.requestAnimationFrame = function (callback, element) {
+                    if (!window.requestAnimationFrame) window.requestAnimationFrame = function(callback, element) {
                         var currTime = new Date().getTime();
                         var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                        var id = window.setTimeout(function () {
+                        var id = window.setTimeout(function() {
                                 callback(currTime + timeToCall);
                             },
                             timeToCall);
@@ -2735,7 +2768,7 @@
                         return id;
                     };
 
-                    if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function (id) {
+                    if (!window.cancelAnimationFrame) window.cancelAnimationFrame = function(id) {
                         clearTimeout(id);
                         return;
                     };
@@ -2743,10 +2776,10 @@
             },
 
             //记录用户表单数据
-            storeUser: function (key, obj) {
+            storeUser: function(key, obj) {
                 myKit.locals.set(key, obj);
             },
-            readUser: function (key, ele1, ele2) {
+            readUser: function(key, ele1, ele2) {
                 var data = myKit.locals.get(key); //获取本地用户信息
                 if (data !== null) {
                     data = JSON.parse(data);
@@ -2755,7 +2788,7 @@
                 }
             },
             // 错误捕获
-            trySth: function (func, errCb) {
+            trySth: function(func, errCb) {
                 try {
                     func ? func() : null
                 } catch (e) {
@@ -2768,26 +2801,26 @@
              * @param type [默认为Eruda; 1为Vconsole]
              * @param config
              */
-            debug: function (type, config) {
+            debug: function(type, config) {
                 var script = document.createElement('script');
                 if (type) {
                     script.src = "//cdn.jsdelivr.net/npm/eruda";
                     document.body.appendChild(script);
-                    script.onload = function () {
+                    script.onload = function() {
                         eruda.init(config)
                     }
                 } else {
                     script.src = "//res.wx.qq.com/mmbizwap/zh_CN/htmledition/js/vconsole/3.0.0/vconsole.min.js";
                     document.body.appendChild(script);
-                    script.onload = function () {
+                    script.onload = function() {
                         var vConsole = new VConsole(config);
                     }
                 }
             },
             // 图片加载出错时
-            imgError: function (picEle, defaultSrc, callback) {
+            imgError: function(picEle, defaultSrc, callback) {
                 $(picEle).on("error",
-                    function () {
+                    function() {
                         var $this = $(this);
                         $this.onerror = null;
                         defaultSrc ? $this.attr("src", defaultSrc) : $this.attr("src", 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAABXUExURQAAAM/Pz83Nzc3Nzc3Nzc3Nzc/Pz8/Pz8/Pz83Nzc3NzczMzMzMzMzMzM3NzczMzMzMzM3NzczMzM3Nzc3Nzc3Nzc7Ozs3NzczMzMzMzMzMzM/Pz83NzT7Ia2sAAAAcdFJOUwAw72CAwCBAEH/Qv/DPkKBQ37Cf4HA/j29fr08g7cIeAAAE9klEQVR42uVbaZerIAx1YXNf6tY+///vfO1MUVBQQIEPky+dc0a9MbkJIYYgMJJwSMbsLcU8N5/fRzKEgSMZkg+sSJosGSyDh9Mrmo8lS6yZAo3NrCTNaEEHMhWzhhQTuvflH7O2PJBX+I+88C3wONs/OocVwHjxdIgxKGEuYOR1Fcju7dOyJpJr6zLdOYJcw39uoq6NTzxL6oq/I5quhD1v/TRWeh0SQz4ijINy4twONFiNAEeIxMz7GQev6UvCqZAZMAFHF+B/PdExTKh1b08Y/UtDJhNg7gYm+OCFxB4ydHyY4ef9tTiOcwMikHXdSS8ndLTmpoJo45d35PJSU4MVP6+DW6TOdTRg8G8rK8JUQ4PHfe5n3kpdgxWfBIENDU6iEdjBf8uySILD/GsNPwgWGxwUKSSyh796IZKTi65/uQV8RoPijAC5pa1FmB/nt5A6qQ4syUIx8RsWd+bfYxsLndBTAtrcXEJ5LNIIyJFNBQilAZImitju/rqmxYGMH9B2ewFK0lF2yM8797liE2D7EbCNBN4Erc0UuOFhJzABtUsfOJBYYILKnQHe8jVBuzcAcNNni3e5oHdqgMUEYLsKODLAEgjNdhlErhQgm2W3lCRBnMhF4Fn5xbsirOVp2EhWAXDQAZPnWIEAyYoQcVlwT0F7CgQ5mwq+OFXgUIGKzfxQVohZVACzldH3KuJSgYAJPCytxGwqAFfiA+lCjLBcBEW1/GIkfTlwRAGrgtfc08goYFfWTPD7V+cYn+5VEWsLp9LSVFQ7KwYlLASOl+JNVQJWUwRewqClUehcAUK5B/1EIY2+RYHAkwKRbwXmYP6zCsA/rwAFTn0r4DkKOt8KQP+puPS9GAGHvRHhclx7qgeWOsRXSbZwj2yaBa6kWMqAzrggCIfps/ufhsE4CnO2PNUDT7LoyvwU43mDqpQ8BVNNzZOYcHCzU1aCTyTzZNFIdDkYMx0j1Zvrg4my6Km5FKGNMgqvn50M0yEdCqRsm7JS4t7ZNN8cKbGRa9F824SRgg9qDj+tQIxxDPj5qUjFlBEXep2qD2IGB3JTTXHL/Ov8QfWaBZhGZavouB9/7VyNKg0NNo1KxVbt6v9UmLXWaZEzHmxbtbQuPN6iL1+25dct0yInfALbpkivclupYOCFJC8VCoKdSYAKAWIlmtYKF6FdWDYHJmjUPivRhys8iiX9+Tcb+uBKMcUcKCr6aEVvk7Pgq3V3nq26kwqHNKIaDJ0QHKuPFuATrog/XNLUIPt0C+CPKK0X5e+1EnciyUdqNOuWBYaSyWZpgJuPp7X0Kz0dLYistquOxiRiFwMM2VG8Q/v44HBOBeW28U/GeN5rkl38ZT2XLqd29+jLqGQaeJEFP0d+FCgUxvlsvv9DaaDRvv3Vth8W8VPiAz9s/OKv+yk/+OPsFR8V1/Bf0zV85phOa4JfXjkkwx/TMYq/3xphND3iMR7PEKgvX1FicshlYno5ZicF1u2ovgp8Jwua2bBmjwpFOsf3EN9IM07/iJ8LydQ6geS5OSF2ZUy035zhez3PDrs9N8fzrh7TIeXuNOf4T6IE+TfuOqjV9eSHKkEvLkuSYVieHQ5D8sgEHTx4T/ERVmZHPqv7ah9U5vrw95Z+JE510NPeQuWJyk4NvSvtHb7u2zN0CGxPh2PQSizRQeCs5MYY/DRN3qqkn98SYMMX/w90XFCLB1Ja+QAAAABJRU5ErkJggg==');
@@ -2798,7 +2831,7 @@
             /**
              * 图片上传
              */
-            webUploader: function (config, successCb, errCb) {
+            webUploader: function(config, successCb, errCb) {
                 var $dom = $(document),
                     isUploading = 0;
                 if (window.WebUploader) {
@@ -2839,7 +2872,7 @@
                         config || {}));
                     // 当有文件添加进来的时候
                     uploader.on('fileQueued',
-                        function (file) {
+                        function(file) {
                             var $li = $('<div id="' + file.id + '" class="file-item thumbnail">' + '<img>' + '<div class="info">' + file.name + '</div>' + '</div>'),
                                 $img = $li.find('img');
 
@@ -2854,7 +2887,7 @@
                             // 如果为非图片文件，可以不用调用此方法。
                             // thumbnailWidth x thumbnailHeight 为 100 x 100
                             uploader.makeThumb(file,
-                                function (error, src) {
+                                function(error, src) {
                                     if (error) {
                                         $img.replaceWith('<span>不能预览</span>');
                                         return;
@@ -2866,14 +2899,14 @@
 
                     //移除已上传图片
                     $dom.on("click", ".file-item",
-                        function (e) {
+                        function(e) {
                             e.preventDefault();
                             $(this).remove();
                         })
 
                     // 文件上传过程中创建进度条实时显示。
                     uploader.on('uploadProgress',
-                        function (file, percentage) {
+                        function(file, percentage) {
                             //if (theData.imgList.length > 2) {
                             //    myKit.showPop("<div>最多九张图</div>", '.noMorePic');
                             //    //myKit.lightPop("最多9张图！")
@@ -2895,7 +2928,7 @@
 
                     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
                     uploader.on('uploadSuccess',
-                        function (file, obj) {
+                        function(file, obj) {
                             isUploading = 0;
                             myKit.lightPop("上传成功");
                             theData.imgList.push(obj.data[0]);
@@ -2905,7 +2938,7 @@
 
                     // 文件上传失败，显示上传出错。
                     uploader.on('uploadError',
-                        function (file) {
+                        function(file) {
                             myKit.lightPop("上传出错");
                             isUploading = 0;
                             var $li = $('#' + file.id),
@@ -2922,7 +2955,7 @@
 
                     // 完成上传完了，成功或者失败，先删除进度条。
                     uploader.on('uploadComplete',
-                        function (file) {
+                        function(file) {
                             theData.isUploading = 0;
                             $('#' + file.id).find('.progress').remove();
                         });
@@ -2939,11 +2972,11 @@
              */
             // <button type="button" class="btn btn-copy" data-clipboard-action="copy" data-clipboard-text="文本信息">复制</button>
             // <button type="button" class="btn btn-copy" data-clipboard-action="copy" data-clipboard-target="#txt">复制</button>
-            copyText: function (sourceEle, successCb, errCb) {
+            copyText: function(sourceEle, successCb, errCb) {
                 if (typeof Clipboard !== 'undefined') {
                     var clipboard = new Clipboard(sourceEle || '.btn-copy');
                     clipboard.on('success',
-                        function (e) {
+                        function(e) {
                             me.lightPop('已复制');
                             //console.info('Action:', e.action);
                             //console.info('Trigger:', e.trigger);
@@ -2953,10 +2986,10 @@
                         });
 
                     clipboard.on('error',
-                        function (e) {
+                        function(e) {
                             me.lightPop('暂不支持一键复制，请手动复制！')
-                            //console.error('Action:', e.action);
-                            //console.error('Trigger:', e.trigger);
+                                //console.error('Action:', e.action);
+                                //console.error('Trigger:', e.trigger);
                             errCb ? errCb() : null;
                         });
                     //}
@@ -2966,7 +2999,7 @@
             },
 
             /*base64 转 blob*/
-            dataURI2Blob: function (dataURI, type) {
+            dataURI2Blob: function(dataURI, type) {
                 var binary = atob(dataURI.split(',')[1]);
                 var array = [];
                 for (var i = 0; i < binary.length; i++) {
@@ -2978,7 +3011,7 @@
             },
 
             /*表单上传base64*/
-            uploadBase64: function (base64Data, cb) {
+            uploadBase64: function(base64Data, cb) {
                 var $Blob = myKit.dataURI2Blob(base64Data, 'image/png');
                 var formData = new FormData();
                 formData.append("files", $Blob, "file_" + Date.parse(new Date()) + ".png");
@@ -2986,7 +3019,7 @@
                 //XMLHttpRequest 上传文件
                 var request = new XMLHttpRequest();
                 request.open("POST", me.config.imgApi || "");
-                request.onreadystatechange = function () {
+                request.onreadystatechange = function() {
                     if (request.readyState == 4) {
                         if (request.status == 200) {
                             console.log("上传成功");
@@ -3005,7 +3038,7 @@
              * @param config:{source:内容容器类名或Id,fileName:'保存的文件名'，format:保存的格式，autoDownload:是否自动下载，showImage:是否显示图片}
              * @param cb
              */
-            html2Img: function (config, cb) {
+            html2Img: function(config, cb) {
                 if (typeof html2canvas !== 'undefined' || typeof Canvas2Image !== 'undefined') {
                     $.extend({
                             fileName: 'share',
@@ -3019,7 +3052,7 @@
                         return false;
                     }
                     // 保存文件
-                    var saveFile = function (data, filename) {
+                    var saveFile = function(data, filename) {
                         var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
                         save_link.href = data;
                         save_link.download = filename;
@@ -3028,7 +3061,7 @@
                         save_link.dispatchEvent(event);
                     };
                     var sourceEle = (typeof config.source === 'string') ? document.querySelector(config.source) : config.source;
-                    html2canvas(sourceEle).then(function (canvas) {
+                    html2canvas(sourceEle).then(function(canvas) {
                         /*默认为原生的保存，不带格式名，将会提示用户保存PNG图片*/
                         //Canvas2Image.saveAsPNG(canvas);
                         var imgSrc = Canvas2Image.saveAsPNG(canvas, true).getAttribute('src');
@@ -3046,7 +3079,7 @@
              * 图片：<img class="b-lazy" src="img/placeholder.jpg" data-src="image.jpg" alt="">
              * 背景图：<div class="b-lazy" data-src="background-image.jpg"></div>
              * */
-            lazyImg: function (conf) {
+            lazyImg: function(conf) {
                 if (typeof Blazy !== 'undefined') {
                     var config = {
                         src: "data-src",
@@ -3055,11 +3088,11 @@
                         srcset: "data-srcset",
                         successClass: "b-loaded",
                         errorClass: "b-error",
-                        success: function (ele) {
+                        success: function(ele) {
                             // Image has loaded
                             // Do your business here
                         },
-                        error: function (ele, msg) {
+                        error: function(ele, msg) {
                             if (msg === 'missing') {
                                 // console.log(arguments)
                                 // Data-src is missing
@@ -3081,14 +3114,14 @@
         }
         window.myKit = window.me = myKit;
         me.curEvt = myKit.hasTouch(); //click or touchstart
-        me.sign = function (a) {
+        me.sign = function(a) {
             var c = Math.abs(parseInt(new Date().getTime() * Math.random() * 10000)).toString();
             var d = 0;
             for (var b = 0; b < c.length; b++) {
                 d += parseInt(c[b])
             }
-            var e = function (f) {
-                return function (g, h) {
+            var e = function(f) {
+                return function(g, h) {
                     return (0 >= (h - "" + g.length)) ? g : (f[h] || (f[h] = Array(h + 1).join(0))) + g
                 }
             }([]);
@@ -3097,56 +3130,57 @@
             return a.toString() + c + d
         };
 
-        window.requestAnimFrame = (function () {
+        window.requestAnimFrame = (function() {
             return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-                function (run) {
+                function(run) {
                     window.setTimeout(run, 16);
                 };
         })();
 
         /*原型扩展*/
         // 时间格式化
-        Date.prototype.format = function (fmt) {
-            var o = {
-                "M+": this.getMonth() + 1,
-                "d+": this.getDate(),
-                "h+": this.getHours() % 12,
-                "H+": this.getHours(),
-                "m+": this.getMinutes(),
-                "s+": this.getSeconds(),
-                "q+": Math.floor((this.getMonth() + 3) / 3),
-                "S": this.getMilliseconds()
-            };
-            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
-        }
-        // 判断闰年
-        Date.prototype.isLeapYear = function () {
-            return (0 == this.getYear() % 4 && ((this.getYear() % 100 != 0) || (this.getYear() % 400 == 0)));
-        }
-        //移除数组中的指定值
-        Array.prototype.removeByValue = function (val) {
-            for (var i = 0; i < this.length; i++) {
-                if (this[i] == val) {
-                    this.splice(i, 1);
-                    break;
+        Date.prototype.format = function(fmt) {
+                var o = {
+                    "M+": this.getMonth() + 1,
+                    "d+": this.getDate(),
+                    "h+": this.getHours() % 12,
+                    "H+": this.getHours(),
+                    "m+": this.getMinutes(),
+                    "s+": this.getSeconds(),
+                    "q+": Math.floor((this.getMonth() + 3) / 3),
+                    "S": this.getMilliseconds()
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            }
+            // 判断闰年
+        Date.prototype.isLeapYear = function() {
+                return (0 == this.getYear() % 4 && ((this.getYear() % 100 != 0) || (this.getYear() % 400 == 0)));
+            }
+            //移除数组中的指定值
+        Array.prototype.removeByValue = function(val) {
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i] == val) {
+                        this.splice(i, 1);
+                        break;
+                    }
                 }
             }
-        }
-        //最小值
-        Array.prototype.min = function () {
-            var min = this[0];
-            var len = this.length;
-            for (var i = 1; i < len; i++) {
-                if (this[i] < min) {
-                    min = this[i];
+            //最小值
+        Array.prototype.min = function() {
+                var min = this[0];
+                var len = this.length;
+                for (var i = 1; i < len; i++) {
+                    if (this[i] < min) {
+                        min = this[i];
+                    }
                 }
+                return min;
             }
-            return min;
-        }
-        //最大值
-        Array.prototype.max = function () {
+            //最大值
+        Array.prototype.max = function() {
             var max = this[0];
             var len = this.length;
             for (var i = 1; i < len; i++) {
@@ -3178,7 +3212,7 @@
         }
 
         //给Number类型增加一个add方法
-        Number.prototype.add = function (arg1, arg2) {
+        Number.prototype.add = function(arg1, arg2) {
             return accAdd(arg1, arg2);
         }
 
@@ -3204,19 +3238,19 @@
         }
 
         //给Number类型增加一个sub方法
-        Number.prototype.sub = function (arg1, arg2) {
+        Number.prototype.sub = function(arg1, arg2) {
             return accSub(arg1, arg2);
         }
 
         // 扩展jquery（内滚动不影响外滚动）eq:$(ele).scrollUnique();
-        $.fn.scrollUnique = function () {
-            return $(this).each(function () {
+        $.fn.scrollUnique = function() {
+            return $(this).each(function() {
                 var eventType = 'mousewheel';
                 if (document.mozHidden !== undefined) {
                     eventType = 'DOMMouseScroll';
                 }
                 $(this).on(eventType,
-                    function (event) {
+                    function(event) {
                         // 一些数据
                         var scrollTop = this.scrollTop,
                             scrollHeight = this.scrollHeight,
@@ -3237,7 +3271,7 @@
         //------- 定义 && 导出 --------------------------
         if (typeof define === "function" && define.amd) {
             define("myKit", ['jquery'],
-                function ($) {
+                function($) {
                     return myKit;
                 });
         }
@@ -3246,7 +3280,7 @@
         var _myKit = window.myKit,
             _me = window.me;
 
-        myKit.noConflict = function (deep) {
+        myKit.noConflict = function(deep) {
             if (window.me === myKit) {
                 window.me = _me;
             }
