@@ -77,7 +77,7 @@ window.PhiToken = window.cookies.get('PhiliUsr', true).token
 console.log(window.PhiToken)
 var Config = {
     name: '菲律宾电话充值管理后台',
-    host: 'http://www.youni.club',
+    host: 'http://www.tuniao.tech',
     api: {
         login: '/admin/login',
         logOut: '',
