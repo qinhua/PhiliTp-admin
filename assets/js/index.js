@@ -22,7 +22,7 @@ $(function () {
                 createTime: $('#t-createTime').val(),
                 phone: $('#t-phone').val(),
                 pageSize: $('#pageSize').text().trim().replace(/条\/\页/g, ''),
-                page: page
+                pageNo: page
             })
         }, 'POST', 'JSON', null, null, function (res) {
             if (res.success) {

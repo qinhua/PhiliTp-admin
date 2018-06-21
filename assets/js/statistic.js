@@ -7,18 +7,18 @@ $(function () {
 
     /*流水数据*/
     var getList = function (page) {
-        me.loadData(Config.host + Config.api.orderList, {
+        me.loadData(Config.host + Config.api.statisList, {
             'requestapp': JSON.stringify({
                 _r: window.sign(1),
                 createTime: $('#t-createTime').val(),
                 pageSize: $('#pageSize').text().trim().replace(/条\/\页/g, ''),
-                page: page
+                pageNo: page
             })
         }, 'POST', 'JSON', null, null, function (res) {
             if (res.success) {
                 var resD = res.data
                 $('#table-box').html(template('render-table', {
-                    data: res.data
+                    data: res.data.itemList
                 }))
                 renderPagination(page, resD.count)
             } else {
@@ -27,7 +27,7 @@ $(function () {
         }, function (res) {
             layer.msg(res.message || '获取失败！')
             $('#table-box').html(template('render-table', {
-                data: [{
+                /*data: [{
                     id: 1,
                     payAmount: 120,
                     finishAmount: 118,
@@ -35,7 +35,7 @@ $(function () {
                     totalAmount: 12500,
                     totalIncome: 1995,
                     createTime: 1496070000000
-                }]
+                }]*/
             }))
         })
     }

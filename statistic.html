@@ -156,7 +156,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="table-box">
-                                    <tr>
+                                    <!--<tr>
                                         <td>1</td>
                                         <td>2017/05/30</td>
                                         <td>120</td>
@@ -168,46 +168,7 @@
                                             <button type="button" class="btn btn-success btn-sm">查看</button>
                                             <button type="button" class="btn btn-danger btn-sm">删除</button>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2017/05/29</td>
-                                        <td>105</td>
-                                        <td>105</td>
-                                        <td>0</td>
-                                        <td>10300Peso</td>
-                                        <td>1805</td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-sm">查看</button>
-                                            <button type="button" class="btn btn-danger btn-sm">删除</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2017/05/28</td>
-                                        <td>225</td>
-                                        <td>225</td>
-                                        <td>0</td>
-                                        <td>18802Peso</td>
-                                        <td>3030</td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-sm">查看</button>
-                                            <button type="button" class="btn btn-danger btn-sm">删除</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>2017/05/27</td>
-                                        <td>180</td>
-                                        <td>180</td>
-                                        <td>0</td>
-                                        <td>15500Peso</td>
-                                        <td>2500</td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-sm">查看</button>
-                                            <button type="button" class="btn btn-danger btn-sm">删除</button>
-                                        </td>
-                                    </tr>
+                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -262,12 +223,13 @@
     {{each data}}
     <tr>
         <td>{{$value.id}}</td>
-        <td>{{$value.createTime | dateFormat 'yyyy-MM-dd hh:mm'}}</td>
-        <td>{{$value.payAmount}}</td>
-        <td>{{$value.finishAmount}}</td>
-        <td>{{$value.waitAmount}}</td>
-        <td>{{$value.totalAmount}}Peso</td>
-        <td>{{$value.totalIncome}}</td>
+        <!--<td>{{$value.createTime | dateFormat 'yyyy-MM-dd hh:mm'}}</td>-->
+        <td>{{$value.date}}</td>
+        <td>{{$value.payCount}}</td>
+        <td>{{$value.finishCount}}</td>
+        <td>{{$value.waitCount}}</td>
+        <td>{{$value.totalForex}}Peso</td>
+        <td>{{$value.totalRmb}}</td>
         <td>
             <button type="button" class="btn btn-success btn-sm" data-id="{{$value.id}}">查看</button>
             <button type="button" class="btn btn-danger btn-sm" data-id="{{$value.id}}">删除</button>

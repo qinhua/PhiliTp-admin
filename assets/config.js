@@ -82,7 +82,7 @@ var Config = {
         login: '/admin/login',
         logOut: '',
         orderList: '/order/list',
-        statisList: '',
+        statisList: '/order/count',
         getRate: '/feeRate/get',
         updateRate: '/feeRate/set',
         tagList: '/TelCostConfig/getConfig',

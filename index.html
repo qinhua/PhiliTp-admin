@@ -155,12 +155,12 @@
                                         <th>充值金额</th>
                                         <th>充值状态</th>
                                         <th>下单时间</th>
-                                        <th>修改时间</th>
+                                        <!--<th>修改时间</th>-->
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody id="table-box">
-                                    <tr>
+                                    <!--<tr>
                                         <td>1</td>
                                         <td>F445286574</td>
                                         <td>090552525254</td>
@@ -204,7 +204,7 @@
                                             <button type="button" class="btn btn-warning btn-sm">退款</button>
                                             <button type="button" class="btn btn-danger btn-sm">删除</button>
                                         </td>
-                                    </tr>
+                                    </tr>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -265,7 +265,7 @@
                     <td>{{$value.forex}}Pseo</td>
                     <td><div class="td-sta {{$value.status | statusCls}}">{{$value.status | statusTxt}}</div></td>
                     <td>{{$value.createTime | dateFormat 'yyyy-MM-dd hh:mm'}}</td>
-                    <td>{{$value.updateTime | dateFormat 'yyyy-MM-dd hh:mm'}}</td>
+                    <!--<td>{{$value.updateTime | dateFormat 'yyyy-MM-dd hh:mm'}}</td>-->
                     <td>
                         <button type="button" class="btn btn-success btn-sm" data-id="{{$value.orderId}}">查看</button>
                         {{if $value.status==2|| $value.status==3}}
