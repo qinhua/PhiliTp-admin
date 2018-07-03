@@ -252,9 +252,9 @@
                     },
                     false);
             },
-            //移动端click事件，若有input点击事件请勿使用
-            attachClick: function () {
-                if (typeof FastClick !== 'undefined' && myKit.envir === 'prod') {
+            //移动端click事件，若有input点击事件请勿使用,omitEnvir:忽略环境
+            attachClick: function (omitEnvir) {
+                if ((typeof FastClick !== 'undefined' && myMixin.envir === 'prod') || omitEnvir) {
                     FastClick.attach(document.body);
                 }
             },
@@ -1729,8 +1729,8 @@
             getDates: function (data) {
                 var timeObj = {};
                 var y = data.getFullYear();
-                var m = data.getMonth() + 1;
-                var d = data.getDate();
+                var m = data.getMonth() + 1 < 10 ? "0" + (data.getMonth() + 1) : data.getMonth() + 1;
+                var d = data.getDate() < 10 ? "0" + data.getDate() : data.getDate();
                 var w = data.getDay();
                 switch (w) {
                     case 1:
@@ -1755,7 +1755,7 @@
                         w = "星期日";
                         break;
                 }
-                var h = data.getHours();
+                var h = data.getHours() < 10 ? "0" + data.getHours() : data.getHours();
                 var mi = data.getMinutes() < 10 ? "0" + data.getMinutes() : data.getMinutes();
                 var s = data.getSeconds() < 10 ? "0" + data.getSeconds() : data.getSeconds();
                 timeObj = {
